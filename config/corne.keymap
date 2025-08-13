@@ -69,9 +69,9 @@
         #binding-cells = <0>;
         /* usb { sequence = <U S B>; bindings = <&out OUT_USB>; }; */
         /* ble { sequence = <B L E>; bindings = <&out OUT_BLE>; }; */
-        base_layer { sequence = <L B>; bindings = <&to BASE>; };
+        base_layer { sequence = <L B B>; bindings = <&to BASE>; };
         fn_layer { sequence = <L F>; bindings = <&mo FKEYS>; };
-        bluetooth_layer { sequence = <L B>; bindings = <&mo BTOOTH>; };
+        bluetooth_layer { sequence = <L B T>; bindings = <&mo BTOOTH>; };
 
       };
       ret2base: ret2base {
