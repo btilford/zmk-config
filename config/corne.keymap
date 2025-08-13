@@ -30,16 +30,17 @@
     continue-list = <UNDERSCORE MINUS DELETE BACKSPACE>;
 };
 &lt {
-    flavor = "tap-preferred";
+    flavor = "balanced";
+    /* flavor = "tap-preferred"; */
     tapping-term-ms = <230>;
     quick-tap-ms = <25>;
-    hold-trigger-on-release;
+    /* hold-trigger-on-release; */
 };
 &mt {
-    flavor = "tap-preferred";
+    flavor = "balanced";
     tapping-term-ms = <230>;
     quick-tap-ms = <25>;
-    hold-trigger-on-release;
+    /* hold-trigger-on-release; */
 };
 
 / {
