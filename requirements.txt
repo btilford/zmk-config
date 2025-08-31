@@ -1,0 +1,5 @@
+west
+pyelftools
+setuptools
+google-api-python-client
+

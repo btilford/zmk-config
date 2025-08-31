@@ -43,6 +43,7 @@
     /* hold-trigger-on-release; */
 };
 
+
 / {
     combos {
         compatible = "zmk,combos";
@@ -52,9 +53,6 @@
             bindings = <&caps_word>;
         };
     };
-};
-
-/ {
     behaviors {
       /* mt_cw: mt_caps_word { */
       /*   compatible = "zmk,behavior-hold-tap"; */
