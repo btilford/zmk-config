@@ -217,8 +217,8 @@ ZMK_MACRO(leader_sft, bindings = <&sk LSHFT &leader>;)
 ZMK_BASE_LAYER(Base,
 &kp TAB    &kp Q       &kp W        &kp E          &kp R          &kp T,            /*|*/    &kp Y         &kp U         &kp I        &kp O          &kp P          &lt BTOOTH BSPC,
 &gresc     &hml LGUI A  &hml LCTRL S  &hml LSHIFT D   &lt MOTION F   &hml LALT G,       /*|*/    &hmr RALT H    &lt TEXT J &hmr RSHIFT K  &hmr RCTRL L    &hmr RGUI SEMI  &kp SQT,
-MAGIC_SHIFT LPAR &kp Z   &kp X        &kp C          &kp V          &kp B,            /*|*/    &lt NUMPD N    &lt MEDIA M &comma_morph     &dot_morph      &kp FSLH       &mt RSHFT RPAR,
-                                    &mo DM         &leader        &lt MOUSE SPACE,  /*|*/    &lt SYM RET    &mo TEXT &kp RALT
+MAGIC_SHIFT  &kp Z   &kp X        &kp C          &kp V          &kp B,            /*|*/    &lt NUMPD N    &lt MEDIA M &comma_morph     &dot_morph      &kp FSLH       &mt RSHFT RPAR,
+                                    &mo DM         &ldr        &lt MOUSE SPACE,  /*|*/    &lt SYM RET    &mo TEXT &kp RALT
 )
 
 
