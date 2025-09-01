@@ -24,6 +24,6 @@ ZMK_LEADER_SEQUENCE(reset,      &sys_reset,     R E S E T)
 ZMK_LEADER_SEQUENCE(boot,       &bootloader,    B O O T)
 
 ZMK_LEADER_SEQUENCE(returnToBaseLayer,  &to BASE,   L B B)
-ZMK_LEADER_SEQUENCE(toFnLayer,          &tog FKEYS,  L F)
+ZMK_LEADER_SEQUENCE(toFnLayer,          &sl FKEYS,  L F)
 ZMK_LEADER_SEQUENCE(toBluetooth,        &tog BTOOTH, L B T)
 
