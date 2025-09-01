@@ -212,7 +212,7 @@ ZMK_MACRO(leader_sft, bindings = <&sk LSHFT &leader>;)
 // | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
 //                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
 
-ZMK_BASE_LAYER(BASE,
+ZMK_BASE_LAYER(Base,
 &kp TAB    &kp Q       &kp W        &kp E          &kp R          &kp T,            /*|*/    &kp Y         &kp U         &kp I        &kp O          &kp P          &lt BTOOTH BSPC,
 &gresc     &mt LGUI A  &mt LCTRL S  &mt LSHIFT D   &lt MOTION F   &mt LALT G,       /*|*/    &mt RALT H    &lt TEXT J &mt RSHIFT K  &mt RCTRL L    &mt RGUI SEMI  &kp SQT,
 &mt LSHFT LPAR &kp Z   &kp X        &kp C          &kp V          &kp B,            /*|*/    &lt NUMPD N    &lt MEDIA M &kp COMMA     &kp DOT      &kp FSLH       &mt RSHFT RPAR,
@@ -225,14 +225,14 @@ ZMK_BASE_LAYER(BASE,
 // | CTRL |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
 // | SHFT |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
 //                    | GUI |     | SPC |   | ENT |     | ALT |
-ZMK_BASE_LAYER(SYM,
+ZMK_BASE_LAYER(Symbol,
 &trans      &kp N1      &kp N2      &kp N3      &kp N4      &kp N5,                           /*|*/     &kp N6      &kp N7      &kp N8           &kp N9       &kp N0       &kp BSPC,
 &trans      &hml LGUI EXCL    &mt LCTRL AT      &mt LSFT HASH    &kp DLLR    &mt LALT PRCNT,   /*|*/      &hmr RALT CARET   &kp AMPS    &mt RSFT KP_MULTIPLY  &mt RCTL LPAR    &mt RGUI RPAR    &kp BSLH,
 &trans      &trans      &trans      &kp GRAVE  &kp MINUS   &kp LBRC,  /*|*/     &kp RBRC  &kp EQUAL   &kp LBKT         &kp RBKT    &kp PIPE    &kp TILDE,
                                     &kp LGUI    &trans      &kp SPACE,   /*|*/     &kp RET     &trans      &kp RALT
 )
 
-ZMK_BASE_LAYER(NUMPD,
+ZMK_BASE_LAYER(Numpad,
 &trans  &kp KP_DIVIDE &kp N7  &kp N8  &kp N9  &kp KP_MULTIPLY, /*|*/   &trans  &trans     &trans  &trans  &trans  &trans,
 &trans  &kp MINUS     &kp N4  &kp N5  &kp N6  &kp PLUS       , /*|*/   &trans  &trans     &trans  &trans  &trans  &trans,
 &trans  &trans        &kp N1  &kp N2  &kp N3  &kp N0         , /*|*/   &trans  &kp EQUAL  &trans  &trans  &trans  &trans,
@@ -240,42 +240,42 @@ ZMK_BASE_LAYER(NUMPD,
 
 )
 
-ZMK_BASE_LAYER(MOTION,
+ZMK_BASE_LAYER(Motion,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &kp HOME  &kp PG_DN  &kp PG_UP  &kp INS    &trans   &kp DEL,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &kp LEFT  &kp DOWN   &kp UP     &kp RIGHT  &kp END  &trans,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans    &kp K_APP  &trans     &trans     &trans   &trans,
                         &trans  &trans  &trans, /*|*/   &trans    &trans     &trans
 )
 
-ZMK_BASE_LAYER(TEXT,
+ZMK_BASE_LAYER(Text,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &trans  &kp C_AC_CUT  &kp C_AC_COPY  &kp C_AC_PASTE  &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
                         &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
 )
 
-ZMK_BASE_LAYER(MEDIA,
+ZMK_BASE_LAYER(Media,
 &trans  &trans  &trans  &trans  &trans  &kp C_VOL_UP, /*|*/   &kp C_BRI_UP  &trans  &trans  &trans  &kp C_PREV  &trans,
 &trans  &trans  &kp C_STOP  &trans  &kp C_PP  &kp C_VOL_DN, /*|*/   &kp C_BRI_DN  &trans  &trans  &trans  &trans  &trans,
 &trans  &trans  &trans  &trans  &trans  &kp C_MUTE, /*|*/  &kp C_NEXT  &trans  &trans  &trans  &trans  &trans,
                         &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
 )
 
-ZMK_BASE_LAYER(DM,
+ZMK_BASE_LAYER(Desktop,
 &trans  &trans/*close/exit*/  &kp C_AC_DESKTOP_SHOW_ALL_WINDOWS  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &kp C_AC_DESKTOP_SHOW_ALL_APPLICATIONS  &trans  &trans  &trans/*fullscreen*/  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
                         &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
 )
 
-ZMK_BASE_LAYER(FN,
+ZMK_BASE_LAYER(Function,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
 &kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp F6, /*|*/   &kp F7  &kp F8  &kp F9  &kp F10  &kp F11  &kp F12,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
                         &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
 )
 
-ZMK_BASE_LAYER(MOUSE,
+ZMK_BASE_LAYER(Mouse,
 &trans  &trans  &trans          &mmv MOVE_UP    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &trans  &trans,
 &trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
@@ -288,7 +288,7 @@ ZMK_BASE_LAYER(MOUSE,
 // | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
 // | SHFT |     |     |     |     |     |   |     |     |     |     |     |      |
 //                    | GUI |     | SPC |   | ENT |     | ALT |
-ZMK_BASE_LAYER(SYS,
+ZMK_BASE_LAYER(System,
 &bootloader     &bt BT_DISC 0  &bt BT_DISC 1  &bt BT_DISC 2  &bt BT_DISC 3  &bt BT_DISC 4, /*|*/   &trans        &out OUT_USB  &trans  &out OUT_TOG  &bt BT_PRV  &bootloader,
 &bt BT_CLR_ALL  &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4 , /*|*/   &trans        &trans       &trans  &trans       &trans      &trans       ,
 &sys_reset      &bt BT_DISC    &trans         &bt BT_CLR     &trans         &out OUT_BLE , /*|*/   &bt BT_NXT    &trans       &trans  &trans       &trans      &sys_reset   ,
