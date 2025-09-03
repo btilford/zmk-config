@@ -232,7 +232,7 @@ MAGIC_SHIFT  &kp Z   &kp X        &kp C          &kp V          &kp B,          
 ZMK_BASE_LAYER(Symbol,
 &trans      &kp N1      &kp N2      &kp N3      &kp N4      &kp N5,                           /*|*/     &kp N6      &kp N7      &kp N8           &kp N9       &kp N0       &kp BSPC,
 &trans      &hml LGUI EXCL    &hml LCTRL AT      &hml LSFT HASH    &kp DLLR    &hml LALT PRCNT,   /*|*/      &hmr RALT CARET   &kp AMPS    &hmr RSFT KP_MULTIPLY  &hmr RCTL LPAR    &hmr RGUI RPAR    &kp BSLH,
-&trans      &trans      &trans      &kp GRAVE  &kp MINUS   &kp LBRC,  /*|*/     &kp RBRC  &kp EQUAL   &kp LBKT         &kp RBKT    &kp PIPE    &kp TILDE,
+&trans      &trans      &kp LBKT      &kp GRAVE  &kp MINUS   &kp LBRC,  /*|*/     &kp RBRC  &kp EQUAL   &trans         &kp RBKT    &kp PIPE    &kp TILDE,
                                     &kp LGUI    &trans      &kp SPACE,   /*|*/     &kp RET     &trans      &kp RALT
 )
 
