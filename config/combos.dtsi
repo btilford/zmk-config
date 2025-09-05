@@ -13,3 +13,4 @@
 #define COMBO_IDLE_SLOW 50
 
 ZMK_COMBO(capsword, &caps_word, LM2 RM2, BASE, COMBO_TERM_SLOW, COMBO_IDLE_SLOW)
+ZMK_COMBO(smart_mouse, &smart_mouse, LM1 RM1,     BASE, COMBO_TERM_FAST, COMBO_IDLE_FAST)
