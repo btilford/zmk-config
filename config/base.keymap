@@ -31,8 +31,8 @@
 
 /* Global defaults */
 
-#define QUICK_TAP_MS 175
-#define TAPPING_TERM_MS 150
+#define QUICK_TAP_MS 193
+#define TAPPING_TERM_MS 200
 
 &sk {
   release-after-ms = <1500>;
