@@ -36,7 +36,7 @@ manifest:
       path: modules/zmk/unicode
     - remote: Good-Great-Grand-Wonderful
       name: gggw-zmk-keebs
-      revision: zephyr-4.1
+      revision: 27e99fbe22fbf38d009ff0718ee27733acd077cd
       import: config.west.yml
 
 
