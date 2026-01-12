@@ -46,15 +46,15 @@ manifest:
       revision: v4.1.0+zmk-fixes
       remote: zmkfirmware
       clone-depth: 1
-      import:
+      #import:
         # Only enable most commonly used boards. For less common hardware one
         # may need to enable additional modules.
-        name-allowlist:
-          - cmsis
-          - hal_nordic
-          - hal_rpi_pico
-          - hal_stm32
-          - lvgl
-          - tinycrypt
+        #name-allowlist:
+        #  - cmsis
+        #  - hal_nordic
+        #  - hal_rpi_pico
+        #  - hal_stm32
+        #  - lvgl
+        #  - tinycrypt
   self:
     path: config
