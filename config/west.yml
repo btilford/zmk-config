@@ -13,6 +13,7 @@ manifest:
   projects:
     - name: zmk
       remote: zmkfirmware
+      revision: v0.3.0
       #remote: urob
       #revision: v0.2+fix-child-nodes
       # revision: main
@@ -42,10 +43,10 @@ manifest:
 
         # Temporarily overload Zephyr until
       # https://github.com/zmkfirmware/zephyr/pull/40 is merged.
-    - name: zephyr
-      revision: v4.1.0+zmk-fixes
-      remote: zmkfirmware
-      clone-depth: 1
+    #- name: zephyr
+    #  revision: v4.1.0+zmk-fixes
+    #  remote: zmkfirmware
+    #  clone-depth: 1
       #import:
         # Only enable most commonly used boards. For less common hardware one
         # may need to enable additional modules.
