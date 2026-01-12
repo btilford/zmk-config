@@ -8,5 +8,6 @@
                  LH RH                                                         \
     )
 
+#include "zmk-helpers/key-labels/42.h"
 #include "base.keymap"
 

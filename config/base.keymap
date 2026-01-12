@@ -274,12 +274,23 @@ ZMK_BASE_LAYER(Desktop,
 )
 
 ZMK_BASE_LAYER(Function,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
 &kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp F6, /*|*/   &kp F7  &kp F8  &kp F9  &kp F10  &kp F11  &kp F12,
+&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
+
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
                         &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
 )
+#ifdef REAL_POINTING_DEVICE
 
+ZMK_BASE_LAYER(Mouse,
+&trans  &trans  &trans          &mmv MOVE_UP    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+&trans  &trans  &mkp LCLK       &mkp MCLK       &mkp LCLK        &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &trans  &trans,
+&trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+                                &trans          &trans           &trans, /*|*/  &mkp LCLK  &mkp RCLK  &trans
+
+)
+
+#else
 ZMK_BASE_LAYER(Mouse,
 &trans  &trans  &trans          &mmv MOVE_UP    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &trans  &trans,
@@ -287,6 +298,7 @@ ZMK_BASE_LAYER(Mouse,
                                 &trans          &trans           &trans, /*|*/  &mkp LCLK  &mkp RCLK  &trans
 
 )
+#endif
 
 // -----------------------------------------------------------------------------------------
 // |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
