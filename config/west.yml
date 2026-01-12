@@ -7,6 +7,9 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: urob
       url-base: https://github.com/urob
+    - name: Good-Great-Grand-Wonderful
+      url: https://github.com/Good-Great-Grand-Wonderful
+
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -31,12 +34,16 @@ manifest:
       path: modules/zmk/zmk-tri-state
     - name: zmk-unicode
       path: modules/zmk/unicode
+    - remote: Goog-Great-Grand-Wonderful
+      name: gggw-zmk-keebs
+      revision: zephyr-4.1
+      import: config.west.yml
 
 
         # Temporarily overload Zephyr until
-        # https://github.com/zmkfirmware/zephyr/pull/40 is merged.
+      # https://github.com/zmkfirmware/zephyr/pull/40 is merged.
     - name: zephyr
-      revision: v3.5.0+zmk-fixes
+      revision: v4.1
       clone-depth: 1
       import:
         # Only enable most commonly used boards. For less common hardware one

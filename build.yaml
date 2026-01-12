@@ -16,8 +16,10 @@ include:
   - board: nice_nano_v2
     shield: corne_left nice_view_adapter nice_view
     snippet: studio-rpc-usb-uart
+    artifact-name: corne-v3-left
   - board: nice_nano_v2
     shield: corne_right nice_view_adapter nice_view
+    artifact-name: corne-v3-right
   #- board: nice_nano_v2
   #  shield: typeractive-corne_left nice_view_adapter nice_view
   #  snippet: studio-rpc-usb-uart
@@ -25,3 +27,14 @@ include:
   #  shield: typeractive-corne_right nice_view_adapter nice_view
   - board: nice_nano_v2
     shield: settings_reset
+    artifact-name: settings-reset
+
+  - board: nice_nano_v2
+    shield: crosses_left nice_view_adapter nice_view
+    snippet: studio-rpc-usb-uart
+    artifact-name: crosses-42-left
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+  - board: nice_nano_v2
+    shield: crosses_right nice_view_adapter nice_view
+    artifact-name: crosses-42-right
+
