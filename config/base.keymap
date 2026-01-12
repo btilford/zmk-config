@@ -36,10 +36,11 @@
 #define TAPPING_TERM_MS 200
 
 #ifdef REAL_POINTING_DEVICE
-# TODO how to setup snipe layers for this driver
-#&hid_trackball_interface {
-#    snipe-layers = <MOUSE_SNIPE>;
-#};
+/* TODO how to setup snipe layers for this driver
+&hid_trackball_interface {
+    snipe-layers = <MOUSE_SNIPE>;
+};
+*/
 #endif
 
 &sk {
