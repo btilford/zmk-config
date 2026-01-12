@@ -1,4 +1,5 @@
 #define CONFIG_WIRELESS
+#define REAL_POINTING_DEVICE
 #define ZMK_BASE_LAYER(name, LT, RT, LM, RM, LB, RB, LH, RH)                   \
     ZMK_LAYER(                                                                 \
         name,                                                                  \
