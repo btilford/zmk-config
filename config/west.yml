@@ -8,7 +8,7 @@ manifest:
     - name: urob
       url-base: https://github.com/urob
     - name: Good-Great-Grand-Wonderful
-      url: https://github.com/Good-Great-Grand-Wonderful
+      url-base: https://github.com/Good-Great-Grand-Wonderful
 
   projects:
     - name: zmk
