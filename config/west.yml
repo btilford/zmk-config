@@ -34,7 +34,7 @@ manifest:
       path: modules/zmk/zmk-tri-state
     - name: zmk-unicode
       path: modules/zmk/unicode
-    - remote: Goog-Great-Grand-Wonderful
+    - remote: Good-Great-Grand-Wonderful
       name: gggw-zmk-keebs
       revision: zephyr-4.1
       import: config.west.yml
