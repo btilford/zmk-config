@@ -31,10 +31,11 @@ include:
 
   - board: nice_nano_v2
     shield: crosses_left nice_view_adapter nice_view
-    snippet: studio-rpc-usb-uart
     artifact-name: crosses-42-left
-    cmake-args: -DCONFIG_ZMK_STUDIO=y
+
   - board: nice_nano_v2
     shield: crosses_right nice_view_adapter nice_view
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+    snippet: studio-rpc-usb-uart
     artifact-name: crosses-42-right
 
