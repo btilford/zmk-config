@@ -37,7 +37,7 @@ manifest:
     - remote: Good-Great-Grand-Wonderful
       name: gggw-zmk-keebs
       revision: zephyr-4.1
-      import: config.west.yml
+      import: config/west.yml
 
 
         # Temporarily overload Zephyr until
