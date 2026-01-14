@@ -1,3 +1,4 @@
+name: Build ZMK firmware artifacts
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
@@ -19,9 +20,17 @@ jobs:
           fi
 
           # Read build.yaml and replace REF_NAME placeholder with actual ref name
-          ref_name="${{ github.ref_name }}"
-          processed_yaml=$(sed "s|REF_NAME|${ref_name}|g" build.yaml)
-          echo "$processed_yaml" > build-processed.yaml
+          # Escape special characters in ref name for sed
+          ref_name=$(echo "${{ github.ref_name }}" | sed 's/[\/&]/\\&/g')
+          sed "s/REF_NAME/${ref_name}/g" build.yaml > build-processed.yaml
+
+          # Validate the processed YAML
+          if ! yq -j build-processed.yaml >/dev/null 2>&1; then
+            echo "Error: Processed YAML is invalid"
+            cat build-processed.yaml
+            exit 1
+          fi
+
           echo "build_matrix_path=build-processed.yaml" >> $GITHUB_OUTPUT
 
   build:

@@ -17,6 +17,11 @@
   delay-ms = <0>;
 };
 
+/* Define mouse click behaviors (missing from mouse.dtsi) */
+&mkp {
+  compatible = "zmk,behavior-mouse-button";
+};
+
 /* Define input scalers */
 zip_xy_scaler: zip_xy_scaler {
   compatible = "zmk,input-processor-scaler";
