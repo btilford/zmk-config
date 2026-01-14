@@ -6,7 +6,7 @@
 trackball_scroll_listener: trackball_scroll_listener {
   compatible = "zmk,input-listener";
   status = "okay";
-  device = <&pixart_pmw3610_0>;  /* Reference first PMW3610 device */
+  device = <&trackball_peripheral>;  /* Reference trackball device from overlay */
   warp {
     layers = <MOTION>;
     input-processors = <&zip_scroll_scaler 2 1>;

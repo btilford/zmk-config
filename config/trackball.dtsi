@@ -2,11 +2,11 @@
 
 #include "trackball_base.dtsi"
 
-/* Create input listeners for PMW3610 trackball devices */
+/* Create input listeners for trackball devices from overlays */
 trackball_movement_fallback: trackball_movement_fallback {
   compatible = "zmk,input-listener";
   status = "okay";
-  device = <&pixart_pmw3610_0>;  /* Reference first PMW3610 device */
+  device = <&trackball_central>;  /* Reference device from right overlay */
   warp {
     layers = <MOTION>;
     input-processors = <&zip_xy_scaler 3 1>;
@@ -20,7 +20,7 @@ trackball_movement_fallback: trackball_movement_fallback {
 trackball_scroll_fallback: trackball_scroll_fallback {
   compatible = "zmk,input-listener";
   status = "okay";
-  device = <&pixart_pmw3610_0>;  /* Reference first PMW3610 device */
+  device = <&trackball_peripheral>;  /* Reference device from left overlay */
   warp {
     layers = <MOTION>;
     input-processors = <&zip_scroll_scaler 2 1>;
