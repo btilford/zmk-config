@@ -4,7 +4,7 @@ jobs:
   preprocess:
     runs-on: ubuntu-latest
     outputs:
-      build_matrix: ${{ steps.process.outputs.build_matrix }}
+      build_matrix_path: ${{ steps.process.outputs.build_matrix_path }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -12,13 +12,21 @@ jobs:
       - name: Process build matrix
         id: process
         run: |
+          # Install yq if not available
+          if ! command -v yq &> /dev/null; then
+            wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+            chmod +x /usr/local/bin/yq
+          fi
+
           # Read build.yaml and replace REF_NAME placeholder with actual ref name
-          processed_yaml=$(sed "s/REF_NAME/${{ github.ref_name }}/g" build.yaml)
-          echo "build_matrix=$(echo "$processed_yaml" | yq -j)" >> $GITHUB_OUTPUT
+          ref_name="${{ github.ref_name }}"
+          processed_yaml=$(sed "s|REF_NAME|${ref_name}|g" build.yaml)
+          echo "$processed_yaml" > build-processed.yaml
+          echo "build_matrix_path=build-processed.yaml" >> $GITHUB_OUTPUT
 
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     needs: preprocess
     with:
-      build_matrix: ${{ needs.preprocess.outputs.build_matrix }}
+      build_matrix_path: ${{ needs.preprocess.outputs.build_matrix_path }}
       archive_name: zmk-firmware-${{ github.ref_name }}

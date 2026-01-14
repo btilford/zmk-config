@@ -18,6 +18,14 @@
 };
 
 /* Define input scalers */
+zip_xy_scaler: zip_xy_scaler {
+  compatible = "zmk,input-processor-scaler";
+  #input-processor-cells = <2>;
+  type = <INPUT_EV_REL>;
+  codes = <INPUT_REL_X INPUT_REL_Y>;
+  track-remainders;
+};
+
 zip_scroll_scaler: zip_scroll_scaler {
   compatible = "zmk,input-processor-scaler";
   #input-processor-cells = <2>;
