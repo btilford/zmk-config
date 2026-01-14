@@ -9,6 +9,8 @@ manifest:
       url-base: https://github.com/urob
     - name: Good-Great-Grand-Wonderful
       url-base: https://github.com/Good-Great-Grand-Wonderful
+    - name: efogdev
+      url-base: https://github.com/efogdev
 
   projects:
     - name: zmk
