@@ -2,37 +2,7 @@ name: Build ZMK firmware artifacts
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  preprocess:
-    runs-on: ubuntu-latest
-    outputs:
-      build_matrix_path: ${{ steps.process.outputs.build_matrix_path }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Process build matrix
-        id: process
-        run: |
-          # Install yq if not available
-          if ! command -v yq &> /dev/null; then
-            wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-            chmod +x /usr/local/bin/yq
-          fi
-
-          # Read build.yaml and replace REF_NAME placeholder with actual ref name
-          ref_name=$(echo "${{ github.ref_name }}" | sed 's/[\/&]/\\&/g')
-          sed "s/REF_NAME/${ref_name}/g" build.yaml > build-processed.yaml
-
-          # Validate the processed YAML
-          if ! yq -o=json -I=0 '.' build-processed.yaml >/dev/null 2>&1; then
-            echo "Error: Processed YAML is invalid"
-            cat build-processed.yaml
-            exit 1
-          fi
-
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-    needs: preprocess
     with:
-      build_matrix_path: ${{ needs.preprocess.outputs.build_matrix_path }}
       archive_name: zmk-firmware-${{ github.ref_name }}

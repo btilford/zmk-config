@@ -9,6 +9,9 @@ This document provides comprehensive guidelines for software engineering agents 
 4. [Project Structure](#project-structure)
 5. [Testing](#testing)
 6. [Continuous Integration](#continuous-integration)
+7. [Advanced Features](#advanced-features)
+8. [GitHub Actions Customization](#github-actions-customization)
+9. [Troubleshooting](#troubleshooting)
 
 ## Build/Lint/Test Commands
 
@@ -36,6 +39,15 @@ just init
 
 # Update west modules
 just update
+```
+
+### Keymap-Drawer Commands
+```bash
+# Generate keymap diagrams
+just test-layouts                 # Validate keymap parsing compatibility
+just draw-corne                   # Generate corne keyboard diagram
+just draw-crosses                 # Generate crosses keyboard diagram
+just draw                         # Generate both diagrams with error handling
 ```
 
 ### Testing
@@ -377,6 +389,30 @@ include:
 - Keep keymap layout comments synchronized with actual layout
 - Test behavior combinations thoroughly
 
+### Version Compatibility
+- **ZMK v0.3.0** uses **Zephyr v3.5.0+zmk-fixes**
+- **ZMK main** uses **Zephyr v4.1** (latest features)
+- **PMW3610 Driver:** Match branch to Zephyr version
+  - `main` branch → Zephyr 3.5
+  - `zephyr-4.1` branch → Zephyr 4.1
+
+**When to Upgrade:**
+- Need latest ZMK features → Use main branch
+- Hardware requires Zephyr 4.1 → Use main branch
+- Stable production → Stick with v0.3.0
+
+**Upgrade Process:**
+1. Update `west.yml` ZMK revision to `main`
+2. Run `west update --fetch-opt=--filter=blob:none`
+3. Test builds with new versions
+4. Update driver versions if needed
+5. Validate all hardware compatibility
+
+**Rollback:**
+- Change ZMK revision back to `v0.3.0` in `west.yml`
+- Run `west update` to revert dependencies
+- Test builds to ensure stability
+
 ### Version Control
 - Commit logical units of functionality
 - Use conventional commit messages
@@ -395,6 +431,130 @@ include:
 - `keymap-drawer`: Keymap visualization
 - VS Code with DTS language support
 - ZMK Studio for testing (when available)
+
+## Advanced Features
+
+### Keymap Visualization
+Repository includes automated keymap diagram generation via keymap-drawer.
+
+**Local Commands:**
+- `just test-layouts` - Validate keymap parsing compatibility
+- `just draw-corne` - Generate corne keyboard diagram
+- `just draw-crosses` - Generate crosses keyboard diagram
+- `just draw` - Generate both diagrams with error handling
+
+**Configuration Files:**
+- `keymap-drawer/corne-42.yaml` - Corne layout and styling
+- `keymap-drawer/crosses-42.yaml` - Crosses layout and styling
+- `keymap-drawer/*.svg` - Generated diagram outputs
+
+**Features:**
+- Combo layer visualization
+- Physical key positioning
+- Custom styling and icons
+- Automated GitHub Actions integration
+
+### Trackball Configuration
+Custom trackball support for PMW3610 hardware with separate left/right functionality.
+
+**File Structure:**
+- `config/trackball_base.dtsi` - Shared mouse behaviors and scalers
+- `config/trackball_movement.dtsi` - Right-side movement configuration
+- `config/trackball_scroll.dtsi` - Left-side scrolling configuration
+- `config/trackball.dtsi` - Fallback dual-functionality
+
+**Mouse Behaviors:**
+- `&mmv` - Mouse movement with acceleration
+- `&msc` - Mouse scrolling with timing
+- `&mkp` - Mouse button clicks
+- `zip_xy_scaler` - XY coordinate scaling
+- `zip_scroll_scaler` - Scroll wheel scaling
+
+**Conditional Loading Pattern:**
+```c
+#ifdef REAL_POINTING_DEVICE
+  #if defined(CROSSES_LEFT) || defined(SHIELD_crosses_left)
+    #include "trackball_scroll.dtsi"
+  #elif defined(CROSSES_RIGHT) || defined(SHIELD_crosses_right)
+    #include "trackball_movement.dtsi"
+  #else
+    #include "trackball.dtsi"
+  #endif
+#endif
+```
+
+**Hardware Compatibility:**
+- PMW3610 driver main branch (Zephyr 3.5)
+- PMW3610 driver zephyr-4.1 branch (Zephyr 4.1)
+- Compatible strings: `pixart,pmw3610` vs `pixart,pmw3610-efogtech`
+
+## GitHub Actions Customization
+
+### Dynamic Artifact Naming
+Build artifacts include GitHub ref names for easy identification across branches/tags.
+
+**Implementation:**
+- `build.yaml` uses `REF_NAME` placeholders
+- Preprocessing job replaces placeholders with actual branch/tag names
+- Handles special characters (slashes, etc.) in ref names
+
+**Workflow Features:**
+- `preprocess` job validates YAML before building
+- Artifact names: `board-shield-ref-name`
+- Archive names: `zmk-firmware-ref-name`
+
+**Example Artifact Names:**
+- Branch `feature/keyboard-layout`: `corne-42-left-feature-keyboard-layout`
+- Tag `v1.2.3`: `settings-reset-v1.2.3`
+- Main branch: `crosses-42-right-main`
+
+**Benefits:**
+- Easy identification of builds from different branches
+- Clean CI/CD artifact management
+- Automatic handling of all ref types
+
+## Troubleshooting
+
+### DTS Compilation Issues
+
+**"Could not find any keymap nodes" (keymap-drawer)**
+- **Cause:** DTS compilation fails due to undefined references
+- **Check:** Ensure all mouse behaviors are defined (`&mmv`, `&msc`, `&mkp`)
+- **Fix:** Verify trackball files include complete behavior definitions
+
+**Undefined Reference Errors**
+- **Common Issues:** Missing scalers, incomplete behaviors
+- **Mouse Behaviors:** Must define compatible strings and properties
+- **Input Scalers:** `zip_xy_scaler`, `zip_scroll_scaler` must be defined
+
+**Version Compatibility**
+- **ZMK/Zephyr Mismatch:** Ensure driver versions match Zephyr version
+- **PMW3610 Driver:** main branch (Zephyr 3.5), zephyr-4.1 branch (Zephyr 4.1)
+- **Compatible Strings:** Must match hardware definitions
+
+### Build Issues
+
+**GitHub Actions YAML Processing**
+- **Backtick Errors:** Remove backticks from file redirections
+- **Special Characters:** Escape slashes in branch names
+- **Validation:** Always validate processed YAML syntax
+
+**West Update Required**
+- Run `west update` after version changes
+- Clears old dependencies and pulls correct versions
+- Required when switching ZMK/Zephyr versions
+
+### Keymap-Drawer Issues
+
+**Layout Compatibility**
+- **Missing Layouts:** Ensure keyboard layouts are defined
+- **gggw_crosses_42_layout:** Required for crosses keyboard
+- **foostan_corne_6col_layout:** Required for corne keyboard
+
+**Configuration Errors**
+- **Invalid YAML:** Check syntax in `.yaml` config files
+- **Missing Behaviors:** Ensure all referenced behaviors exist
+- **Path Issues:** Verify correct file paths in commands
 
 ---
 
