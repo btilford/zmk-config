@@ -3,6 +3,7 @@
 
 # ZMK build artifacts
 .zmk/
+.build/
 build/
 
 # Zephyr West Workspace and Modules
@@ -472,5 +473,4 @@ build/              # Generated keymaps, diagrams, and temp files
 
 # Zephyr West Modules (do not commit - managed by west)
 gggw-zmk-keebs/     # Custom keyboard definitions
-gggw-zmk-keebs/*     # Custom keyboard definitions
 
