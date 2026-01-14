@@ -53,13 +53,71 @@ clean-all: clean
 clean-nix:
     nix-collect-garbage --delete-old
 
-# parse & plot keymap
-draw:
+# test keymap-drawer layout compatibility
+test-layouts:
     #!/usr/bin/env bash
     set -euo pipefail
-    keymap -c "{{ draw }}/config.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >"{{ draw }}/base.yaml"
-    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/base.yaml"
-    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/base.yaml" -k "ferris/sweep" >"{{ draw }}/base.svg"
+
+    echo "Testing keymap-drawer layout compatibility..."
+
+    # Test corne layout
+    if keymap -c "{{ draw }}/corne-42.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >/dev/null 2>&1; then
+        echo "✓ Corne layout: Compatible"
+    else
+        echo "✗ Corne layout: Failed - check configuration"
+    fi
+
+    # Test crosses layout
+    if keymap -c "{{ draw }}/crosses-42.yaml" parse -z "{{ config }}/crosses-42.keymap" --virtual-layers Combos >/dev/null 2>&1; then
+        echo "✓ Crosses layout: Compatible"
+    else
+        echo "✗ Crosses layout: Failed - check configuration"
+    fi
+
+# generate corne keymap diagram
+draw-corne:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Generating corne keymap diagram..."
+    keymap -c "{{ draw }}/corne-42.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >"{{ draw }}/corne.yaml"
+    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/corne.yaml"
+    keymap -c "{{ draw }}/corne-42.yaml" draw "{{ draw }}/corne.yaml" >"{{ draw }}/corne-42.svg"
+    echo "✓ Generated corne-42.svg"
+
+# generate crosses keymap diagram
+draw-crosses:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Generating crosses keymap diagram..."
+    keymap -c "{{ draw }}/crosses-42.yaml" parse -z "{{ config }}/crosses-42.keymap" --virtual-layers Combos >"{{ draw }}/crosses.yaml"
+    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/crosses.yaml"
+    keymap -c "{{ draw }}/crosses-42.yaml" draw "{{ draw }}/crosses.yaml" >"{{ draw }}/crosses-42.svg"
+    echo "✓ Generated crosses-42.svg"
+
+# generate both keymap diagrams
+draw: test-layouts
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Generating keymap diagrams..."
+
+    # Draw corne (continue even if fails)
+    if just draw-corne; then
+        echo "✓ Corne diagram generated successfully"
+    else
+        echo "⚠ Corne diagram failed, continuing..."
+    fi
+
+    # Draw crosses (continue even if fails)
+    if just draw-crosses; then
+        echo "✓ Crosses diagram generated successfully"
+    else
+        echo "⚠ Crosses diagram failed, continuing..."
+    fi
+
+    echo "Keymap generation complete. Check for any warnings above."
 
 # initialize west
 init:

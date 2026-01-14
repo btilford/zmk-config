@@ -4,12 +4,12 @@
 # Example for using the keymap-drawer ZMK user config workflow
 name: Draw ZMK keymaps
 on:
-  workflow_dispatch: # can be triggered manually
+  workflow_dispatch: {} # can be triggered manually
   push: # automatically run on changes to following paths
     paths:
       - "config/*.keymap"
-      - "config/config_keymap-drawer.yaml"
-      - .github/workflows/keymap-drawer.yaml
+      - "keymap-drawer/*.yaml"
+      - ".github/workflows/keymap-drawer.yaml"
 
 jobs:
   draw:
