@@ -2,7 +2,19 @@
 
 #include "mouse.dtsi"
 
-/* Right side: trackball_central_listener handles movement only */
+/* Configure trackball_central_listener with mouse movement properties */
+&trackball_central_listener {
+  warp {
+    layers = <MOTION>;
+    input-processors = <&zip_xy_scaler 3 1>;
+  };
+  precision {
+    layers = <FKEYS>;
+    input-processors = <&zip_xy_scaler 1 2>;
+  };
+};
+
+/* Alias mouse movement listener to configured trackball listener */
 &mmv_input_listener = &trackball_central_listener;
 
 /* Disable scroll listener - not used on right side */

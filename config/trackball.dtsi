@@ -1,15 +1,30 @@
-/* Fallback trackball configuration for crosses keyboard with REAL_POINTING_DEVICE */
+/* Fallback trackball configuration for crosses keyboard */
 
 #include "mouse.dtsi"
 
-/*
- * Dual aliases for both left and right sides
- * The appropriate listener will be enabled by the overlay
- * Disabled listeners will be ignored by the build system
- */
+/* Configure both trackball listeners with appropriate properties */
+&trackball_peripheral_listener {
+  warp {
+    layers = <MOTION>;
+    input-processors = <&zip_scroll_scaler 2 1>;
+  };
+  precision {
+    layers = <FKEYS>;
+    input-processors = <&zip_scroll_scaler 1 2>;
+  };
+};
 
-&mmv_input_listener = &trackball_peripheral_listener;  /* Left side */
-&mmv_input_listener = &trackball_central_listener;     /* Right side */
+&trackball_central_listener {
+  warp {
+    layers = <MOTION>;
+    input-processors = <&zip_xy_scaler 3 1>;
+  };
+  precision {
+    layers = <FKEYS>;
+    input-processors = <&zip_xy_scaler 1 2>;
+  };
+};
 
-&msc_input_listener = &trackball_peripheral_listener;  /* Left side */
-&msc_input_listener = &trackball_central_listener;     /* Right side */
+/* Dual aliases - enabled listener takes precedence */
+&mmv_input_listener = &trackball_central_listener;
+&msc_input_listener = &trackball_peripheral_listener;
