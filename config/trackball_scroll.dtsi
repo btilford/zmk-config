@@ -1,23 +1,43 @@
 /* Trackball scroll configuration for crosses left */
 
-#include "mouse.dtsi"
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 
-/* Configure trackball_peripheral_listener with mouse scroll properties */
-&trackball_peripheral_listener {
-  warp {
-    layers = <MOTION>;
-    input-processors = <&zip_scroll_scaler 2 1>;
-  };
-  precision {
-    layers = <FKEYS>;
-    input-processors = <&zip_scroll_scaler 1 2>;
-  };
+/* Define mouse behaviors */
+&mmv {
+  acceleration-exponent = <1>;
+  time-to-max-speed-ms = <500>;
+  delay-ms = <0>;
 };
 
-/* Alias mouse scroll listener to configured trackball listener */
-&msc_input_listener = &trackball_peripheral_listener;
+&msc {
+  acceleration-exponent = <0>;
+  time-to-max-speed-ms = <300>;
+  delay-ms = <0>;
+};
 
-/* Disable movement listener - not used on left side */
+/* Define input scalers */
+zip_scroll_scaler: zip_scroll_scaler {
+  compatible = "zmk,input-processor-scaler";
+  #input-processor-cells = <2>;
+  type = <INPUT_EV_REL>;
+  codes = <INPUT_REL_WHEEL INPUT_REL_HWHEEL>;
+  track-remainders;
+};
+
+/* Connect mouse listeners to trackball listeners */
+&msc_input_listener = &trackball_peripheral_listener;
 &mmv_input_listener {
   status = "disabled";
 };
+
+/* Mouse movement macros */
+#define U_MS_U &mmv MOVE_UP
+#define U_MS_D &mmv MOVE_DOWN
+#define U_MS_L &mmv MOVE_LEFT
+#define U_MS_R &mmv MOVE_RIGHT
+#define U_WH_U &msc SCRL_UP
+#define U_WH_D &msc SCRL_DOWN
+#define U_WH_L &msc SCRL_LEFT
+#define U_WH_R &msc SCRL_RIGHT
