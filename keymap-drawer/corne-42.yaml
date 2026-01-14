@@ -215,4 +215,4 @@ parse_config:
     BT_SEL: $$mdi:bluetooth-connect$$
   zmk_combos: {}
   zmk_preamble: '#define KEYMAP_DRAWER'
-  zmk_additional_includes: []
+  zmk_additional_includes: ["zmk-helpers/include"]

@@ -6,7 +6,7 @@
 trackball_movement_listener: trackball_movement_listener {
   compatible = "zmk,input-listener";
   status = "okay";
-  device = <&trackball_central>;  /* Reference trackball device from overlay */
+  device = <&trackball_central>;  /* Reference trackball device from gggw-zmk-keebs overlay */
   warp {
     layers = <MOTION>;
     input-processors = <&zip_xy_scaler 3 1>;
