@@ -1,44 +1,33 @@
 /* Fallback trackball configuration for crosses keyboard */
 
-#include <dt-bindings/zmk/pointing.h>
-#include <input/processors.dtsi>
-#include <zephyr/dt-bindings/input/input-event-codes.h>
-
-/* Define mouse behaviors */
-&mmv {
-  acceleration-exponent = <1>;
-  time-to-max-speed-ms = <500>;
-  delay-ms = <0>;
-};
-
-&msc {
-  acceleration-exponent = <0>;
-  time-to-max-speed-ms = <300>;
-  delay-ms = <0>;
-};
-
-/* Define input scalers */
-zip_scroll_scaler: zip_scroll_scaler {
-  compatible = "zmk,input-processor-scaler";
-  #input-processor-cells = <2>;
-  type = <INPUT_EV_REL>;
-  codes = <INPUT_REL_WHEEL INPUT_REL_HWHEEL>;
-  track-remainders;
-};
+#include "trackball_base.dtsi"
 
 /*
- * Dual aliases - the crosses overlays configure the trackball listeners
- * with appropriate input processors. The enabled listener takes precedence.
+ * Configure both trackball listeners with appropriate properties
+ * The crosses overlays enable different listeners for left/right sides
  */
+&trackball_peripheral_listener {
+  warp {
+    layers = <MOTION>;
+    input-processors = <&zip_scroll_scaler 2 1>;
+  };
+  precision {
+    layers = <FKEYS>;
+    input-processors = <&zip_scroll_scaler 1 2>;
+  };
+};
+
+&trackball_central_listener {
+  warp {
+    layers = <MOTION>;
+    input-processors = <&zip_xy_scaler 3 1>;
+  };
+  precision {
+    layers = <FKEYS>;
+    input-processors = <&zip_xy_scaler 1 2>;
+  };
+};
+
+/* Dual aliases - enabled listener takes precedence */
 &mmv_input_listener = &trackball_central_listener;
 &msc_input_listener = &trackball_peripheral_listener;
-
-/* Mouse movement macros */
-#define U_MS_U &mmv MOVE_UP
-#define U_MS_D &mmv MOVE_DOWN
-#define U_MS_L &mmv MOVE_LEFT
-#define U_MS_R &mmv MOVE_RIGHT
-#define U_WH_U &msc SCRL_UP
-#define U_WH_D &msc SCRL_DOWN
-#define U_WH_L &msc SCRL_LEFT
-#define U_WH_R &msc SCRL_RIGHT
