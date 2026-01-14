@@ -472,5 +472,6 @@ build/              # Generated keymaps, diagrams, and temp files
 .generated/         # Alternative generated files location
 
 # Zephyr West Modules (do not commit - managed by west)
+**/gggw-zmk-keebs/     # Custom keyboard definitions
 gggw-zmk-keebs/     # Custom keyboard definitions
 
