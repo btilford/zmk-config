@@ -473,8 +473,6 @@ cython_debug/
 # ZMK Generated Files
 build/              # Generated keymaps, diagrams, and temp files
 .generated/         # Alternative generated files location
-keymap-drawer/*.svg # Generated keymap diagrams
-keymap-drawer/*.png # Generated keymap diagrams (if any)
 
 # Zephyr West Modules (do not commit - managed by west)
 **/gggw-zmk-keebs/     # Custom keyboard definitions
