@@ -1,0 +1,11 @@
+/* Trackball movement configuration for crosses right */
+
+#include "mouse.dtsi"
+
+/* Right side: trackball_central_listener handles movement only */
+&mmv_input_listener = &trackball_central_listener;
+
+/* Disable scroll listener - not used on right side */
+&msc_input_listener {
+  status = "disabled";
+};

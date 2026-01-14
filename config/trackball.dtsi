@@ -1,0 +1,15 @@
+/* Fallback trackball configuration for crosses keyboard with REAL_POINTING_DEVICE */
+
+#include "mouse.dtsi"
+
+/*
+ * Dual aliases for both left and right sides
+ * The appropriate listener will be enabled by the overlay
+ * Disabled listeners will be ignored by the build system
+ */
+
+&mmv_input_listener = &trackball_peripheral_listener;  /* Left side */
+&mmv_input_listener = &trackball_central_listener;     /* Right side */
+
+&msc_input_listener = &trackball_peripheral_listener;  /* Left side */
+&msc_input_listener = &trackball_central_listener;     /* Right side */

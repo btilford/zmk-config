@@ -1,0 +1,11 @@
+/* Trackball scroll configuration for crosses left */
+
+#include "mouse.dtsi"
+
+/* Left side: trackball_peripheral_listener handles scrolling only */
+&msc_input_listener = &trackball_peripheral_listener;
+
+/* Disable movement listener - not used on left side */
+&mmv_input_listener {
+  status = "disabled";
+};
