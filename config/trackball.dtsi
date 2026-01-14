@@ -2,22 +2,11 @@
 
 #include "trackball_base.dtsi"
 
-/*
- * Configure both trackball listeners with appropriate properties
- * The crosses overlays enable different listeners for left/right sides
- */
-&trackball_peripheral_listener {
-  warp {
-    layers = <MOTION>;
-    input-processors = <&zip_scroll_scaler 2 1>;
-  };
-  precision {
-    layers = <FKEYS>;
-    input-processors = <&zip_scroll_scaler 1 2>;
-  };
-};
-
-&trackball_central_listener {
+/* Create input listeners for PMW3610 trackball devices */
+trackball_movement_fallback: trackball_movement_fallback {
+  compatible = "zmk,input-listener";
+  status = "okay";
+  device = <&pixart_pmw3610_0>;  /* Reference first PMW3610 device */
   warp {
     layers = <MOTION>;
     input-processors = <&zip_xy_scaler 3 1>;
@@ -28,6 +17,20 @@
   };
 };
 
-/* Dual aliases - enabled listener takes precedence */
-&mmv_input_listener = &trackball_central_listener;
-&msc_input_listener = &trackball_peripheral_listener;
+trackball_scroll_fallback: trackball_scroll_fallback {
+  compatible = "zmk,input-listener";
+  status = "okay";
+  device = <&pixart_pmw3610_0>;  /* Reference first PMW3610 device */
+  warp {
+    layers = <MOTION>;
+    input-processors = <&zip_scroll_scaler 2 1>;
+  };
+  precision {
+    layers = <FKEYS>;
+    input-processors = <&zip_scroll_scaler 1 2>;
+  };
+};
+
+/* Dual aliases - both available for fallback */
+&mmv_input_listener = &trackball_movement_fallback;
+&msc_input_listener = &trackball_scroll_fallback;

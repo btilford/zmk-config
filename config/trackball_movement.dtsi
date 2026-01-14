@@ -2,11 +2,11 @@
 
 #include "trackball_base.dtsi"
 
-/*
- * Configure trackball_central_listener with mouse movement properties
- * This overrides the basic configuration from the crosses overlay
- */
-&trackball_central_listener {
+/* Create input listener for PMW3610 trackball device */
+trackball_movement_listener: trackball_movement_listener {
+  compatible = "zmk,input-listener";
+  status = "okay";
+  device = <&pixart_pmw3610_0>;  /* Reference first PMW3610 device */
   warp {
     layers = <MOTION>;
     input-processors = <&zip_xy_scaler 3 1>;
@@ -17,8 +17,8 @@
   };
 };
 
-/* Alias mouse movement listener to the configured trackball listener */
-&mmv_input_listener = &trackball_central_listener;
+/* Alias mouse movement listener to our custom listener */
+&mmv_input_listener = &trackball_movement_listener;
 
 /* Disable scroll listener - not used on right side */
 &msc_input_listener {
