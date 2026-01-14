@@ -477,4 +477,11 @@ build/              # Generated keymaps, diagrams, and temp files
 # Zephyr West Modules (do not commit - managed by west)
 **/gggw-zmk-keebs/     # Custom keyboard definitions
 gggw-zmk-keebs/     # Custom keyboard definitions
-
+firmware/
+zmk-input-processor-xyz/
+zmk-pmw3610-driver/
+zmk-report-rate-limit/
+zmk-rgbled-widget/
+modules/
+zephyr/
+.west/
