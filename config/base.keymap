@@ -78,10 +78,6 @@ MAKE_HRM(hmr, &kp, &kp,KEYS_R THUMBS) // Right-hand HRMs.
 #include "combos.dtsi" // Must be sourced after HRM-combo hack.
 #include "leader.dtsi"
 
-#ifndef REAL_POINTING_DEVICE
-#include "mouse.dtsi"
-#endif
-
 #ifdef REAL_POINTING_DEVICE
 /* TODO how to setup snipe layers for this driver
 &hid_trackball_interface {

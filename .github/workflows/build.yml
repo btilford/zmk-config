@@ -21,17 +21,14 @@ jobs:
 
           # Read build.yaml and replace REF_NAME placeholder with actual ref name
           ref_name=$(echo "${{ github.ref_name }}" | sed 's/[\/&]/\\&/g')
-          sed "s/REF_NAME/${ref_name}/g" build.yaml > `build-processed.yaml`
+          sed "s/REF_NAME/${ref_name}/g" build.yaml > build-processed.yaml
 
           # Validate the processed YAML
-          if ! yq -o=json -I=0 '.' `build-processed.yaml` >/dev/null 2>&1; then
+          if ! yq -o=json -I=0 '.' build-processed.yaml >/dev/null 2>&1; then
             echo "Error: Processed YAML is invalid"
-            cat `build-processed.yaml`
+            cat build-processed.yaml
             exit 1
           fi
-
-          # Export compact JSON matrix to environment
-          echo "build_matrix=$(yq -o=json -I=0 '.' `build-processed.yaml`)" >> $GITHUB_ENV
 
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
