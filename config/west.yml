@@ -7,9 +7,12 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: urob
       url-base: https://github.com/urob
-    - name: Good-Great-Grand-Wonderful
-      url-base: https://github.com/Good-Great-Grand-Wonderful
-
+    - name: efogdev
+      url-base: https://github.com/efogdev
+    - name: badjeff
+      url-base: https://github.com/badjeff
+    - name: caksoylar
+      url-base: https://github.com/caksoylar
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -32,10 +35,5 @@ manifest:
       path: modules/zmk/zmk-tri-state
     - name: zmk-unicode
       path: modules/zmk/unicode
-    - name: gggw-zmk-keebs
-      remote: Good-Great-Grand-Wonderful
-      revision: main
-      import: config/west.yml
-      clone-depth: 1
   self:
-    path: config
+     path: config

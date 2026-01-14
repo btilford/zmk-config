@@ -9,18 +9,16 @@
                  LH RH                                                         \
     )
 
-#include "zmk-helpers/key-labels/42.h"
+#include <zmk-helpers/key-labels/42.h>
 
-#ifdef REAL_POINTING_DEVICE
-  /* Conditional trackball includes based on side detection */
-  #if defined(CROSSES_LEFT) || defined(SHIELD_crosses_left)
-    #include "trackball_scroll.dtsi"
-  #elif defined(CROSSES_RIGHT) || defined(SHIELD_crosses_right)
-    #include "trackball_movement.dtsi"
-  #else
-    /* Fallback: dual aliases for both sides */
-    #include "trackball.dtsi"
-  #endif
+/* Conditional trackball includes based on side detection */
+#if defined(CROSSES_LEFT) || defined(SHIELD_crosses_left)
+  #include "trackball_scroll.dtsi"
+#elif defined(CROSSES_RIGHT) || defined(SHIELD_crosses_right)
+  #include "trackball_movement.dtsi"
+#else
+  /* Fallback: dual aliases for both sides */
+  #include "trackball.dtsi"
 #endif
 
 #include "base.keymap"

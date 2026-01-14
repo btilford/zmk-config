@@ -158,12 +158,12 @@ Build individual keyboard variants:
 
 ```bash
 # Corne variants
-just build corne-42-left
-just build corne-42-right
+just build corne-left
+just build corne-right
 
 # Crosses variants
-just build crosses-42-left
-just build crosses-42-right
+just build crosses-left
+just build crosses-right
 ```
 
 ### Keymap-Drawer Commands
@@ -203,13 +203,13 @@ Manual keymap processing:
 
 ```bash
 # Generate full keymaps with all layers
-python zmk_keymap_extractor.py config/corne-42.keymap config/corne-42.conf build/keymaps/corne-42-full.keymap -o build/keymaps
-python zmk_keymap_extractor.py config/crosses-42.keymap config/crosses-42.conf build/keymaps/crosses-42-full.keymap -o build/keymaps
+python zmk_keymap_extractor.py config/corne.keymap config/corne.conf build/keymaps/corne-full.keymap -o build/keymaps
+python zmk_keymap_extractor.py config/crosses.keymap config/crosses.conf build/keymaps/crosses-full.keymap -o build/keymaps
 
 # Parse and draw
-keymap -c keymap-drawer/corne-42.yaml parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
-sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
-keymap -c keymap-drawer/corne-42.yaml draw build/temp/corne-full.yaml > build/diagrams/corne-42-full.svg
+keymap -c keymap-drawer/corne.yaml parse -z build/keymaps/corne-full.keymap > build/temp/corne-full.yaml
+sed -i 's/zmk_keyboard: corne-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
+keymap -c keymap-drawer/corne.yaml draw build/temp/corne-full.yaml > build/diagrams/corne-full.svg
 ```
 
 ### Testing Commands
@@ -230,11 +230,11 @@ keymap -c keymap-drawer/corne-42.yaml draw build/temp/corne-full.yaml > build/di
 ## Configuration Files
 
 ### Keyboard Configurations
-- `config/corne-42.keymap` - Corne keyboard layout
-- `config/crosses-42.keymap` - Crosses keyboard layout
+- `config/corne.keymap` - Corne keyboard layout
+- `config/crosses.keymap` - Crosses keyboard layout
 - `config/base.keymap` - Shared layer definitions
-- `config/corne-42.conf` - Corne-specific configuration
-- `config/crosses-42.conf` - Crosses-specific configuration
+- `config/corne.conf` - Corne-specific configuration
+- `config/crosses.conf` - Crosses-specific configuration
 
 ### Trackball Support
 - `config/trackball_base.dtsi` - Shared trackball behaviors
@@ -243,8 +243,8 @@ keymap -c keymap-drawer/corne-42.yaml draw build/temp/corne-full.yaml > build/di
 - `REAL_POINTING_DEVICE` define affects mouse layer differences
 
 ### Keymap Visualization
-- `keymap-drawer/corne-42.yaml` - Corne diagram configuration
-- `keymap-drawer/crosses-42.yaml` - Crosses diagram configuration
+- `keymap-drawer/corne.yaml` - Corne diagram configuration
+- `keymap-drawer/crosses.yaml` - Crosses diagram configuration
 - `zmk_keymap_extractor.py` - Automation script for full keymap generation
 
 ## Layer Structure

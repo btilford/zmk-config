@@ -585,6 +585,20 @@ Build artifacts include GitHub ref names for easy identification across branches
 - Clean CI/CD artifact management
 - Automatic handling of all ref types
 
+## Keymap Inclusion Issues
+
+### Crosses Keyboard Using Wrong Keymaps
+**Problem**: Crosses keyboard flashes with original gggw-zmk-keebs mappings instead of custom keymaps.
+
+**Root Cause**: Shield keymaps take precedence over config directory keymaps in ZMK's build system.
+
+**Solution**: The crosses board definitions have been integrated into this repository. Custom keymaps are now properly included in the shield definition.
+
+**Verification**: Check firmware binary contains custom behaviors:
+```bash
+strings .build/crosses_42_right/zephyr/zmk.elf | grep -E "(hml|hmr|magic_shift|smart_num)"
+```
+
 ## Troubleshooting
 
 ### DTS Compilation Issues
@@ -671,6 +685,23 @@ Build artifacts include GitHub ref names for easy identification across branches
 - **Missing Behaviors:** Ensure all referenced behaviors exist
 - **Path Issues:** Verify correct file paths in commands
 
+### Keymap Inclusion Issues
+
+**Crosses Keyboard Using Wrong Keymaps**
+- **Problem**: Crosses keyboard flashes with original gggw-zmk-keebs mappings instead of custom keymaps
+- **Root Cause**: Shield keymaps take precedence over config directory keymaps in ZMK's build system
+- **Solution**: Extract board definitions from external repository and integrate locally
+  1. Copy board definitions to `boards/shields/crosses/` and `zmk/app/boards/shields/crosses/`
+  2. Add required ZMK modules directly to `config/west.yml`
+  3. Create shield-specific keymap override (`config/crosses_right.keymap`)
+  4. Remove external gggw-zmk-keebs dependency
+- **Verification**: Check firmware binary contains custom behaviors:
+  ```bash
+  strings .build/crosses_42_right/zephyr/zmk.elf | grep -E "(hml|hmr|magic_shift|smart_num)"
+  ```
+
 ---
+
+*This document should be updated when new patterns or conventions are established. Last updated: $(date)*
 
 *This document should be updated when new patterns or conventions are established. Last updated: $(date)*

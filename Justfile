@@ -81,29 +81,34 @@ test-layouts:
 
 # generate corne keymap diagram
 draw-corne:
-    #!/usr/bin/env bash
-    set -euo pipefail
+	#!/usr/bin/env bash
+	set -euo pipefail
 
-    echo "Generating corne keymap diagram..."
-    mkdir -p build/keymaps build/diagrams build/temp
-    python zmk_keymap_extractor.py "{{ config }}/corne-42.keymap" "{{ config }}/corne-42.conf" build/keymaps/corne-42-full.keymap -o build/keymaps
-    keymap -c "{{ draw }}/corne-42.yaml" parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
-    sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
-    keymap -c "{{ draw }}/corne-42.yaml" draw build/temp/corne-full.yaml > build/diagrams/corne-42-full.svg
-    echo "✓ Generated build/diagrams/corne-42-full.svg"
+	echo "Generating corne keymap diagram..."
+	mkdir -p build/keymaps build/diagrams build/temp
+	python zmk_keymap_extractor.py "{{ config }}/corne-42.keymap" "{{ config }}/corne-42.conf" build/keymaps/corne-42-full.keymap -o build/keymaps
+	keymap -c "{{ draw }}/corne-42.yaml" parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
+	sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
+	keymap -c "{{ draw }}/corne-42.yaml" draw build/temp/corne-full.yaml > build/diagrams/corne-42-full.svg
+	cp build/diagrams/corne-42-full.svg "{{ draw }}/corne-42-full.svg"
+	echo "✓ Generated build/diagrams/corne-42-full.svg"
+	echo "✓ Updated keymap-drawer/corne-42-full.svg"
 
 # generate crosses keymap diagram
 draw-crosses:
-    #!/usr/bin/env bash
-    set -euo pipefail
+	#!/usr/bin/env bash
+	set -euo pipefail
 
-    echo "Generating crosses keymap diagram..."
-    mkdir -p build/keymaps build/diagrams build/temp
-    python zmk_keymap_extractor.py "{{ config }}/crosses-42.keymap" "{{ config }}/crosses-42.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
-    keymap -c "{{ draw }}/crosses-42.yaml" parse -z build/keymaps/crosses-42-full.keymap > build/temp/crosses-full.yaml
-    sed -i 's/zmk_keyboard: crosses-42-full/zmk_keyboard: corne/' build/temp/crosses-full.yaml
-    keymap -c "{{ draw }}/crosses-42.yaml" draw build/temp/crosses-full.yaml > build/diagrams/crosses-42-full.svg
-    echo "✓ Generated build/diagrams/crosses-42-full.svg"
+	echo "Generating crosses keymap diagram..."
+	mkdir -p build/keymaps build/diagrams build/temp
+	python zmk_keymap_extractor.py "{{ config }}/crosses-42.keymap" "{{ config }}/crosses-42.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
+	keymap -c "{{ draw }}/crosses-42.yaml" parse -z build/keymaps/crosses-42-full.keymap > build/temp/crosses-full.yaml
+	keymap -c "{{ draw }}/crosses-42.yaml" draw -j "{{ config }}/crosses-42-info.json" -l gggw_crosses_42_layout build/temp/crosses-full.yaml > build/diagrams/crosses-42-full.svg
+	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42-full.svg"
+	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42.svg"
+	echo "✓ Generated build/diagrams/crosses-42-full.svg"
+	echo "✓ Updated keymap-drawer/crosses-42-full.svg"
+	echo "✓ Updated keymap-drawer/crosses-42.svg"
 
 # clean generated files
 clean-generated:

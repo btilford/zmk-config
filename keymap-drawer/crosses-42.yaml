@@ -110,18 +110,7 @@ parse_config:
   trans_legend:
     tap: $$mdi:transfer$$
     type: trans
-  layer_legend_map:
-    "Base": Base
-    "Symbol": Symbol
-    "Numpad": Numpad
-    "Motion": Motion
-    "Text": Text
-    "Media": Media
-    "Desktop": Desktop Management
-    "Function": Function Keys
-    "Mouse": Mouse
-    "MouseSnipe": Mouse Snipe
-    "System": System
+  layer_legend_map: {}
   mark_alternate_layer_activators: true
   modifier_fn_map:
     left_ctrl: Ctl
@@ -226,4 +215,4 @@ parse_config:
     BT_SEL: $$mdi:bluetooth-connect$$
   zmk_combos: {}
   zmk_preamble: '#define KEYMAP_DRAWER'
-  zmk_additional_includes: ["zmk-helpers/include"]
+  zmk_additional_includes: []
