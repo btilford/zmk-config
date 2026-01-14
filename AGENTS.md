@@ -121,6 +121,11 @@ CONFIG_BT_CRYPTO=n
 - **`build.yaml`**: CI build matrix definition
 - **`Justfile`**: Task runner definitions
 
+### Immutable Files
+The following files should never be modified:
+- `config/base.keymap`: The core keymap configuration
+- The following dtsi files: `config/combos.dtsi`, `config/leader.dtsi`, `config/mouse.dtsi`
+
 ### Device Tree Source (DTS) Style
 
 #### Includes and Preprocessing
