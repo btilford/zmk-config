@@ -61,14 +61,14 @@ test-layouts:
     echo "Testing keymap-drawer layout compatibility..."
 
     # Test corne layout
-    if keymap -c "{{ draw }}/corne-42.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >/dev/null 2>&1; then
+    if keymap -c "{{ draw }}/corne-42.yaml" parse -z "{{ config }}/corne-42-simple.keymap" --virtual-layers Combos >/dev/null 2>&1; then
         echo "✓ Corne layout: Compatible"
     else
         echo "✗ Corne layout: Failed - check configuration"
     fi
 
     # Test crosses layout
-    if keymap -c "{{ draw }}/crosses-42.yaml" parse -z "{{ config }}/crosses-42.keymap" --virtual-layers Combos >/dev/null 2>&1; then
+    if keymap -c "{{ draw }}/crosses-42.yaml" parse -z "{{ config }}/crosses-42-simple.keymap" --virtual-layers Combos >/dev/null 2>&1; then
         echo "✓ Crosses layout: Compatible"
     else
         echo "✗ Crosses layout: Failed - check configuration"
@@ -80,7 +80,7 @@ draw-corne:
     set -euo pipefail
 
     echo "Generating corne keymap diagram..."
-    keymap -c "{{ draw }}/corne-42.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >"{{ draw }}/corne.yaml"
+    keymap -c "{{ draw }}/corne-42.yaml" parse -z "{{ config }}/corne-42-simple.keymap" --virtual-layers Combos >"{{ draw }}/corne.yaml"
     yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/corne.yaml"
     keymap -c "{{ draw }}/corne-42.yaml" draw "{{ draw }}/corne.yaml" >"{{ draw }}/corne-42.svg"
     echo "✓ Generated corne-42.svg"
@@ -91,7 +91,7 @@ draw-crosses:
     set -euo pipefail
 
     echo "Generating crosses keymap diagram..."
-    keymap -c "{{ draw }}/crosses-42.yaml" parse -z "{{ config }}/crosses-42.keymap" --virtual-layers Combos >"{{ draw }}/crosses.yaml"
+    keymap -c "{{ draw }}/crosses-42.yaml" parse -z "{{ config }}/crosses-42-simple.keymap" --virtual-layers Combos >"{{ draw }}/crosses.yaml"
     yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/crosses.yaml"
     keymap -c "{{ draw }}/crosses-42.yaml" draw "{{ draw }}/crosses.yaml" >"{{ draw }}/crosses-42.svg"
     echo "✓ Generated crosses-42.svg"
