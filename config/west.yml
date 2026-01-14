@@ -41,12 +41,10 @@ manifest:
       import: config/west.yml
       clone-depth: 1
 
-    # Temporarily overload Zephyr until
-    # https://github.com/zmkfirmware/zephyr/pull/40 is merged.
-    - name: zephyr
-      revision: v4.1.0+zmk-fixes
-      remote: zmkfirmware
-      clone-depth: 1
+    # Override PMW3610 driver to use main branch (Zephyr 3.5 compatible)
+    - name: zmk-pmw3610-driver
+      remote: efogdev
+      revision: main
         # Only enable most commonly used boards. For less common hardware one
         # may need to enable additional modules.
         #name-allowlist:
