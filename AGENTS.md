@@ -33,6 +33,7 @@ just build crosses-42-right
 # Clean build artifacts
 just clean                        # Remove build and firmware directories
 just clean-all                    # Remove all generated files (west, zmk, etc.)
+just clean-generated              # Remove generated keymaps and diagrams
 
 # Initialize west workspace (first-time setup)
 just init
@@ -422,13 +423,30 @@ include:
 ## Tooling
 
 ### Required Tools
-- `west`: Zephyr build system
-- `just`: Task runner
-- Python 3.x with dependencies from `requirements.txt`
-- Zephyr SDK (managed by `west`)
+- **Python Virtual Environment** (recommended for dependency isolation):
+  ```bash
+  python -m venv zmk-env
+  source zmk-env/bin/activate  # Linux/macOS
+  # zmk-env\Scripts\activate   # Windows
+  pip install west keymap-drawer pyelftools
+  ```
+- `west`: Zephyr build system (install via pip in venv)
+- `just`: Task runner (system package: `sudo pacman -S just` on Arch)
+- Python 3.10+ with required packages (west, keymap-drawer, pyelftools)
+- **Zephyr SDK v0.17.0** (required for Zephyr v4.1.0 compatibility):
+  ```bash
+  # Download and install
+  wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/zephyr-sdk-0.17.0_linux-x86_64.tar.xz
+  tar xf zephyr-sdk-0.17.0_linux-x86_64.tar.xz
+  cd zephyr-sdk-0.17.0 && ./setup.sh
+
+  # Source environment (add to shell profile)
+  source ~/zephyr-sdk-0.17.0/zephyr-env.sh
+  ```
 
 ### Optional Tools
 - `keymap-drawer`: Keymap visualization
+- `zmk_keymap_extractor.py`: Custom script for processing complex ZMK keymaps
 - VS Code with DTS language support
 - ZMK Studio for testing (when available)
 
@@ -442,17 +460,22 @@ Repository includes automated keymap diagram generation via keymap-drawer.
 - `just draw-corne` - Generate corne keyboard diagram
 - `just draw-crosses` - Generate crosses keyboard diagram
 - `just draw` - Generate both diagrams with error handling
+- `just clean-generated` - Remove all generated files
 
 **Configuration Files:**
 - `keymap-drawer/corne-42.yaml` - Corne layout and styling
 - `keymap-drawer/crosses-42.yaml` - Crosses layout and styling
-- `keymap-drawer/*.svg` - Generated diagram outputs
+
+**Generated Files (in build/ directory):**
+- `build/keymaps/` - Processed keymap files with all layers
+- `build/diagrams/` - Final SVG diagram outputs
+- `build/temp/` - Intermediate parsing files
 
 **Features:**
-- Combo layer visualization
-- Physical key positioning
-- Custom styling and icons
-- Automated GitHub Actions integration
+- Full 11-layer visualization (Base, Symbol, Numpad, Motion, Text, Media, Desktop, Function, Mouse, MouseSnipe, System)
+- Complex behavior preservation (home row mods, layer taps, combos)
+- Conditional compilation handling (REAL_POINTING_DEVICE, CONFIG_WIRELESS)
+- Automated intermediate file processing via `zmk_keymap_extractor.py`
 
 ### Trackball Configuration
 Custom trackball support for PMW3610 hardware with separate left/right functionality.
@@ -543,6 +566,24 @@ Build artifacts include GitHub ref names for easy identification across branches
 - Run `west update` after version changes
 - Clears old dependencies and pulls correct versions
 - Required when switching ZMK/Zephyr versions
+
+### Environment Setup Issues
+
+**Virtual Environment Problems**
+- **Not Activated:** Run `source zmk-env/bin/activate` before using Python tools
+- **Wrong Python Version:** Ensure venv uses Python 3.10+
+- **Missing Dependencies:** Install all packages: `pip install west keymap-drawer pyelftools`
+
+**Zephyr SDK Issues**
+- **Version Mismatch:** Must use SDK v0.17.0 for Zephyr v4.1.0 compatibility
+- **Environment Not Sourced:** Run `source ~/zephyr-sdk-0.17.0/zephyr-env.sh`
+- **Installation Failed:** Check available disk space and permissions
+- **CMake Not Found:** Install system packages: `sudo apt-get install cmake ninja-build` (Ubuntu/Debian)
+
+**West Issues**
+- **Command Not Found:** Install via pip: `pip install west`
+- **Workspace Not Initialized:** Run `just init` first
+- **Module Updates:** Run `west update` after changing ZMK versions
 
 ### Keymap-Drawer Issues
 

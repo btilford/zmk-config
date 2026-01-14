@@ -6,3 +6,14 @@ jobs:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     with:
       archive_name: zmk-firmware-${{ github.ref_name }}
+
+  keymap-diagrams:
+    needs: build
+    uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@main
+    permissions:
+      contents: write
+    with:
+      amend_commit: true
+      keymap_patterns: "config/corne-42-simple.keymap config/crosses-42-simple.keymap"
+      output_folder: "keymap-drawer"
+      west_config_path: 'config'

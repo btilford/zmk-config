@@ -459,4 +459,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-.build/
+# ZMK Generated Files
+build/              # Generated keymaps, diagrams, and temp files
+.generated/         # Alternative generated files location
+
+# Zephyr West Modules (do not commit - managed by west)
+gggw-zmk-keebs/     # Custom keyboard definitions

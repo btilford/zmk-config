@@ -110,7 +110,18 @@ parse_config:
   trans_legend:
     tap: $$mdi:transfer$$
     type: trans
-  layer_legend_map: {}
+  layer_legend_map:
+    "Base": Base
+    "Symbol": Symbol
+    "Numpad": Numpad
+    "Motion": Motion
+    "Text": Text
+    "Media": Media
+    "Desktop": Desktop Management
+    "Function": Function Keys
+    "Mouse": Mouse
+    "MouseSnipe": Mouse Snipe
+    "System": System
   mark_alternate_layer_activators: true
   modifier_fn_map:
     left_ctrl: Ctl
