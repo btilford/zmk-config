@@ -1,9 +1,16 @@
+# Virtual environments
 .venv/
+
+# ZMK build artifacts
 .zmk/
-.west/
-modules/
-zephyr/
 build/
+
+# Zephyr West Workspace and Modules
+# These are managed by 'west' and should not be committed
+.west/              # West workspace metadata
+modules/            # ZMK modules and dependencies
+zephyr/             # Zephyr RTOS source code
+gggw-zmk-keebs/     # Custom keyboard definitions
 zmk/
 zmk-leader-key/
 zmk-auto-layer/
@@ -465,3 +472,5 @@ build/              # Generated keymaps, diagrams, and temp files
 
 # Zephyr West Modules (do not commit - managed by west)
 gggw-zmk-keebs/     # Custom keyboard definitions
+gggw-zmk-keebs/*     # Custom keyboard definitions
+

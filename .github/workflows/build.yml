@@ -8,12 +8,36 @@ jobs:
       archive_name: zmk-firmware-${{ github.ref_name }}
 
   keymap-diagrams:
+    runs-on: ubuntu-latest
     needs: build
-    uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@main
     permissions:
       contents: write
-    with:
-      amend_commit: true
-      keymap_patterns: "config/corne-42-simple.keymap config/crosses-42-simple.keymap"
-      output_folder: "keymap-drawer"
-      west_config_path: 'config'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          pip install keymap-drawer pyelftools
+      - name: Generate full keymaps
+        run: |
+          python zmk_keymap_extractor.py config/corne-42.keymap config/corne-42.conf build/keymaps/corne-42-full.keymap -o build/keymaps
+          python zmk_keymap_extractor.py config/crosses-42.keymap config/crosses-42.conf build/keymaps/crosses-42-full.keymap -o build/keymaps
+      - name: Generate diagrams
+        run: |
+          keymap -c keymap-drawer/corne-42.yaml parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
+          sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
+          keymap -c keymap-drawer/corne-42.yaml draw build/temp/corne-full.yaml > build/diagrams/corne-42-full.svg
+
+          keymap -c keymap-drawer/crosses-42.yaml parse -z build/keymaps/crosses-42-full.keymap > build/temp/crosses-full.yaml
+          sed -i 's/zmk_keyboard: crosses-42-full/zmk_keyboard: corne/' build/temp/crosses-full.yaml
+          keymap -c keymap-drawer/crosses-42.yaml draw build/temp/crosses-full.yaml > build/diagrams/crosses-42-full.svg
+      - name: Commit diagrams
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add build/diagrams/*.svg
+          git commit -m "Update keyboard diagrams" || echo "No changes to commit"
