@@ -35,9 +35,6 @@
 #define QUICK_TAP_MS 193
 #define TAPPING_TERM_MS 200
 
-
-#endif
-
 &sk {
   release-after-ms = <1500>;
   quick-release;
@@ -222,6 +219,8 @@ ZMK_MACRO(leader_sft, bindings = <&sk LSHFT &leader>;)
       ZMK_LAYER(name, LT RT LM RM LB RB LH RH)
 #endif
 
+
+#endif
 
 /* vim: set ft=c tw=146: */
 
