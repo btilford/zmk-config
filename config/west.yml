@@ -7,6 +7,8 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: urob
       url-base: https://github.com/urob
+    - name: Good-Great-Grand-Wonderful
+      url-base: https://github.com/Good-Great-Grand-Wonderful
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -29,5 +31,9 @@ manifest:
       path: modules/zmk/zmk-tri-state
     - name: zmk-unicode
       path: modules/zmk/unicode
+    - name: gggw-zmk-keebs
+      remote: Good-Great-Grand-Wonderful
+      revision: zephyr-4.1
+      import: config/west.yml
   self:
      path: config
