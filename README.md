@@ -19,36 +19,55 @@ This repository contains ZMK firmware configuration for custom mechanical keyboa
 
 ### Zephyr SDK Installation
 
-**Important:** This project requires Zephyr SDK v0.17.0 specifically, as it's designed for Zephyr v4.1.0.
+**Important:** This project currently uses ZMK v0.3.0, which requires Zephyr SDK v0.16.5 for proper Bluetooth ECC support. Using v0.17.0 causes crypto compatibility issues.
 
-1. **Download Zephyr SDK v0.17.0:**
+#### For Current Setup (ZMK v0.3.0 + Bluetooth ECC Support)
+
+1. **Download Zephyr SDK v0.16.5:**
    ```bash
    # For Linux x86_64
-   wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/zephyr-sdk-0.17.0_linux-x86_64.tar.xz
-   tar xf zephyr-sdk-0.17.0_linux-x86_64.tar.xz
+   wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.5/zephyr-sdk-0.16.5_linux-x86_64.tar.xz
+   tar xf zephyr-sdk-0.16.5_linux-x86_64.tar.xz
    ```
 
 2. **Install SDK:**
    ```bash
-   cd zephyr-sdk-0.17.0
+   cd zephyr-sdk-0.16.5
    ./setup.sh
    ```
 
 3. **Source environment (add to your shell profile):**
    ```bash
-   source ~/zephyr-sdk-0.17.0/zephyr-env.sh
+   export ZEPHYR_SDK_INSTALL_DIR=/home/btilford/zephyr-sdk-0.16.5
+   source /home/btilford/zephyr-sdk-0.16.5/environment-setup-x86_64-pokysdk-linux
    ```
 
-   Or for system-wide installation (requires sudo):
-   ```bash
-   # On Arch Linux
-   sudo pacman -S zephyr-sdk
+#### Alternative: ZMK Main Branch (Future Upgrade)
 
-   # Note: Arch's zephyr-sdk package may not be v0.17.0 exactly.
-   # Check version with: pacman -Qi zephyr-sdk
-   # Source the environment
-   source /opt/zephyr-sdk/zephyr-env.sh
-   ```
+For ZMK main branch with latest features, use Zephyr SDK v0.17.0:
+
+```bash
+# Download and install v0.17.0
+wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/zephyr-sdk-0.17.0_linux-x86_64.tar.xz
+tar xf zephyr-sdk-0.17.0_linux-x86_64.tar.xz
+cd zephyr-sdk-0.17.0
+./setup.sh
+
+# Source environment (v0.17.0 has zephyr-env.sh)
+source ~/zephyr-sdk-0.17.0/zephyr-env.sh
+```
+
+#### Key Differences Between SDK Versions
+
+| Feature | v0.16.5 (Current) | v0.17.0 (Future) |
+|---------|-------------------|------------------|
+| **ZMK Compatibility** | v0.3.0 (stable) | main branch (latest) |
+| **Bluetooth ECC** | ✅ Full support | ⚠️ Crypto header issues |
+| **Environment Script** | `environment-setup-x86_64-pokysdk-linux` | `zephyr-env.sh` |
+| **Zephyr Version** | 3.5.0+zmk-fixes | 4.1.0 |
+| **Setup Method** | Manual env vars + source script | Single source script |
+
+**Recommendation:** Stick with v0.16.5 for current production use. Upgrade to v0.17.0 + ZMK main when ready for latest features.
 
 ### Development Tools
 
@@ -277,8 +296,11 @@ Both keyboards support 11 layers in this order:
 - Verify layer definitions match expected format
 
 ### Zephyr SDK Issues
-- **Version Mismatch:** Ensure you're using SDK v0.17.0 for Zephyr v4.1 compatibility
-- **Environment Not Sourced:** Run `source ~/zephyr-sdk-0.17.0/zephyr-env.sh` in your terminal
+- **Version Mismatch:** Use SDK v0.16.5 for ZMK v0.3.0 (current), v0.17.0 for ZMK main
+- **Environment Setup:**
+  - v0.16.5: `export ZEPHYR_SDK_INSTALL_DIR=~/zephyr-sdk-0.16.5 && source ~/zephyr-sdk-0.16.5/environment-setup-x86_64-pokysdk-linux`
+  - v0.17.0: `source ~/zephyr-sdk-0.17.0/zephyr-env.sh`
+- **Bluetooth Crypto Issues:** If PSA crypto header errors occur, ensure SDK version matches ZMK version
 - **Permission Issues:** If using system installation, ensure `/opt/zephyr-sdk` is accessible
 - **Missing Dependencies:** Install required packages: `sudo apt-get install cmake ninja-build` (Ubuntu/Debian)
 

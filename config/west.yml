@@ -34,17 +34,8 @@ manifest:
       path: modules/zmk/unicode
     - name: gggw-zmk-keebs
       remote: Good-Great-Grand-Wonderful
-      revision: zephyr-4.1
+      revision: main
       import: config/west.yml
       clone-depth: 1
-        # Only enable most commonly used boards. For less common hardware one
-        # may need to enable additional modules.
-        #name-allowlist:
-        #  - cmsis
-        #  - hal_nordic
-        #  - hal_rpi_pico
-        #  - hal_stm32
-        #  - lvgl
-        #  - tinycrypt
   self:
     path: config

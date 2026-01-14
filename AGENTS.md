@@ -85,6 +85,31 @@ just upgrade-sdk
 just clean-nix
 ```
 
+## Essential Requirements
+
+### Bluetooth Configuration
+**Bluetooth must remain enabled for keyboard functionality.** These keyboards are designed as wireless devices and require Bluetooth connectivity to function properly.
+
+**⚠️ IMPORTANT: Do not disable `CONFIG_BT`** - This will render the keyboards inoperable as they cannot connect to devices without wireless capability.
+
+**Current Configuration:**
+```conf
+# Bluetooth is required for keyboard functionality - do not disable
+# Note: If build fails due to PSA crypto issues, ensure Zephyr SDK version is compatible with ZMK version
+CONFIG_BT_ECC=n
+CONFIG_BT_CRYPTO=n
+```
+
+**SDK Compatibility Notes:**
+- **ZMK v0.3.0** requires **Zephyr SDK v0.16.x** for proper Bluetooth crypto support
+- **ZMK main branch** requires **Zephyr SDK v0.17.0+** for Zephyr 4.1 compatibility
+- If encountering PSA crypto header errors (`psa/crypto.h` not found), verify SDK version matches ZMK version requirements
+
+**Dependencies:**
+- Zephyr SDK must include Bluetooth stack components
+- Ensure `west` workspace is properly initialized with Bluetooth-enabled modules
+- Check `west.yml` for correct ZMK and Zephyr version coordination
+
 ## Code Style Guidelines
 
 ### File Organization
@@ -397,6 +422,11 @@ include:
   - `main` branch → Zephyr 3.5
   - `zephyr-4.1` branch → Zephyr 4.1
 
+**Bluetooth Requirements:**
+- **Bluetooth must remain enabled** (`CONFIG_BT=y`) for keyboard functionality
+- Do not disable `CONFIG_BT_ECC` or `CONFIG_BT_CRYPTO` unless compatibility issues arise
+- Use appropriate Zephyr SDK version to avoid PSA crypto header issues
+
 **When to Upgrade:**
 - Need latest ZMK features → Use main branch
 - Hardware requires Zephyr 4.1 → Use main branch
@@ -405,13 +435,18 @@ include:
 **Upgrade Process:**
 1. Update `west.yml` ZMK revision to `main`
 2. Run `west update --fetch-opt=--filter=blob:none`
-3. Test builds with new versions
-4. Update driver versions if needed
-5. Validate all hardware compatibility
+3. **Install Zephyr SDK v0.17.0** (remove v0.16.5 if present)
+4. Update PMW3610 driver to `zephyr-4.1` branch if using trackball
+5. Re-enable Bluetooth crypto if previously disabled (`CONFIG_BT_ECC=y`, `CONFIG_BT_CRYPTO=y`)
+6. Test builds with new versions
+7. Validate all hardware compatibility
 
-**Rollback:**
+**Rollback Process:**
 - Change ZMK revision back to `v0.3.0` in `west.yml`
 - Run `west update` to revert dependencies
+- **Install Zephyr SDK v0.16.5** (remove v0.17.0 if present)
+- Update PMW3610 driver back to `main` branch if using trackball
+- Ensure Bluetooth crypto is enabled (`CONFIG_BT_ECC=y`, `CONFIG_BT_CRYPTO=y`)
 - Test builds to ensure stability
 
 ### Version Control
@@ -433,16 +468,30 @@ include:
 - `west`: Zephyr build system (install via pip in venv)
 - `just`: Task runner (system package: `sudo pacman -S just` on Arch)
 - Python 3.10+ with required packages (west, keymap-drawer, pyelftools)
-- **Zephyr SDK v0.17.0** (required for Zephyr v4.1.0 compatibility):
+- **Zephyr SDK** (version depends on ZMK branch):
   ```bash
-  # Download and install
+  # For ZMK v0.3.0 (Zephyr 3.5.0+zmk-fixes) - CURRENT RECOMMENDATION:
+  wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.5/zephyr-sdk-0.16.5_linux-x86_64.tar.xz
+  tar xf zephyr-sdk-0.16.5_linux-x86_64.tar.xz
+  cd zephyr-sdk-0.16.5 && ./setup.sh
+  # Environment setup (v0.16.5 doesn't have zephyr-env.sh):
+  export ZEPHYR_SDK_INSTALL_DIR=/home/btilford/zephyr-sdk-0.16.5
+  source /home/btilford/zephyr-sdk-0.16.5/environment-setup-x86_64-pokysdk-linux
+
+  # For ZMK main branch (Zephyr 4.1.0) - FUTURE UPGRADE:
   wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/zephyr-sdk-0.17.0_linux-x86_64.tar.xz
   tar xf zephyr-sdk-0.17.0_linux-x86_64.tar.xz
   cd zephyr-sdk-0.17.0 && ./setup.sh
-
-  # Source environment (add to shell profile)
   source ~/zephyr-sdk-0.17.0/zephyr-env.sh
   ```
+
+  **⚠️ CRITICAL SDK Version Compatibility:**
+  - **ZMK v0.3.0** → **Zephyr SDK v0.16.x** (Bluetooth crypto support, current setup)
+  - **ZMK main** → **Zephyr SDK v0.17.0+** (Zephyr 4.1 compatibility, future upgrade)
+
+  **SDK Version Differences:**
+  - **v0.16.5**: Manual environment setup, full Bluetooth ECC support with ZMK v0.3.0
+  - **v0.17.0**: Single `zephyr-env.sh` script, but has PSA crypto header issues with ZMK v0.3.0
 
 ### Optional Tools
 - `keymap-drawer`: Keymap visualization
@@ -566,6 +615,31 @@ Build artifacts include GitHub ref names for easy identification across branches
 - Run `west update` after version changes
 - Clears old dependencies and pulls correct versions
 - Required when switching ZMK/Zephyr versions
+
+### Version Management Issues
+
+**SDK Version Conflicts**
+- **PSA Crypto Headers Missing:** `psa/crypto.h` not found - indicates wrong SDK version for ZMK branch
+- **Libc Mutex Conflicts:** Conflicting `__lock___libc_recursive_mutex` types - Zephyr/SDK version mismatch
+- **Build Assertion Failures:** Device name too long - may indicate version compatibility issues
+
+**Version Switching Process:**
+1. Update `west.yml` ZMK revision to desired version
+2. Run `west update --fetch-opt=--filter=blob:none`
+3. Switch Zephyr SDK version to match ZMK requirements
+4. Clean build artifacts: `just clean`
+5. Test build: `just build corne`
+
+**When to Upgrade:**
+- Need latest ZMK features → Use main branch
+- Hardware requires Zephyr 4.1 → Use main branch
+- Stable production → Stick with v0.3.0
+
+**Rollback Process:**
+- Change ZMK revision back to `v0.3.0` in `west.yml`
+- Run `west update` to revert dependencies
+- Switch to Zephyr SDK v0.16.x
+- Test builds to ensure stability
 
 ### Environment Setup Issues
 
