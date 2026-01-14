@@ -1,22 +1,16 @@
 manifest:
   defaults:
     remote: urob
-    revision: main
+    revision: v0.3
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
     - name: urob
       url-base: https://github.com/urob
-    - name: efogdev
-      url-base: https://github.com/efogdev
-    - name: badjeff
-      url-base: https://github.com/badjeff
-    - name: caksoylar
-      url-base: https://github.com/caksoylar
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: main
+      revision: v0.3.0
       import: app/west.yml
     - name: zmk-leader-key
       remote: urob
