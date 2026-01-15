@@ -420,6 +420,11 @@ include:
 - Keep keymap layout comments synchronized with actual layout
 - Test behavior combinations thoroughly
 
+### Multi-Keyboard Change Management
+- Avoid changing mappings, settings, or configurations that affect more than one keyboard without verifying functionality on all affected boards and shields
+- When modifying shared files (e.g., `config/base.keymap`, `config/*.dtsi`), ensure changes do not break compatibility across different keyboard types
+- Test builds for all relevant targets (e.g., `just build all`) before committing changes to shared components
+
 ### Version Compatibility
 - **ZMK v0.3.0** uses **Zephyr v3.5.0+zmk-fixes**
 - **ZMK main** uses **Zephyr v4.1** (latest features)
