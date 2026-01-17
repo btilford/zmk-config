@@ -14,6 +14,18 @@ We have successfully resolved the build errors and hardware conflicts preventing
 5. **Keymap Matrix Correction**: Fixed a row offset issue in the 42-key layout transform where the top row was incorrectly mapped to `RC(0,x)` instead of `RC(1,x)`.
 6. **Unified Base Configuration**: Reorganized the keymaps to use `crosses_shared.dtsi`, ensuring that layout changes made to the base map are automatically applied to both the left and right firmware builds.
 
+## Hardware Constraints: Nice!View vs. Trackball
+Due to the physical wiring of the Crosses PCB, there is a fundamental pin conflict between the Nice!View display and the PMW3610 trackball sensor. Both devices share the following pins for incompatible hardware functions:
+
+| Pin | Trackball Function | Nice!View Function | Conflict Type |
+| :--- | :--- | :--- | :--- |
+| **D2 (P0.17)** | **SPI Clock** (SCK) | SPI Data (MOSI) | Electrical Collision |
+| **D3 (P0.20)** | **Interrupt** (IRQ) | SPI Clock (SCK) | Signal Collision |
+| **D1 (P0.06)** | **SPI Data** (MOSI) | Chip Select (CS) | Bus Collision |
+
+> [!WARNING]
+> Because these pins are hard-wired on the PCB, you cannot use the Nice!View displays and the trackballs simultaneously without physical hardware modifications (jumper wires). For this reason, the displays must remain disabled in the firmware to ensure trackball stability.
+
 ## Final Solution Status
 - **Movement**: The Right trackball controls the cursor with 2:1 scaling.
 - **Scrolling**: The Left trackball controls vertical/horizontal scrolling.
