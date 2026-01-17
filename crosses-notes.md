@@ -56,6 +56,4 @@ The blue status LED on the left controller flashes during matrix scanning and ca
     - **Build**: `just build crosses` (Success generates `zmk.uf2` in `firmware/`).
     - **Diagrams**: `just draw-crosses` (Generates SVG diagrams in `keymap-drawer/`).
 
-### Firmware Files
-- [crosses_42_left.uf2](file:///home/btilford/Projects/keyboard/zmk-config/firmware/crosses_42_left.uf2)
-- [crosses_42_right.uf2](file:///home/btilford/Projects/keyboard/zmk-config/firmware/crosses_42_right.uf2)
+
