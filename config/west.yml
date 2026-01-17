@@ -9,6 +9,12 @@ manifest:
       url-base: https://github.com/urob
     - name: Good-Great-Grand-Wonderful
       url-base: https://github.com/Good-Great-Grand-Wonderful
+    - name: efogdev
+      url-base: https://github.com/efogdev
+    - name: badjeff
+      url-base: https://github.com/badjeff
+    - name: caksoylar
+      url-base: https://github.com/caksoylar
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -34,6 +40,23 @@ manifest:
     - name: gggw-zmk-keebs
       remote: Good-Great-Grand-Wonderful
       revision: zephyr-4.1
+      path: modules/gggw-zmk-keebs
       import: config/west.yml
+    - name: zmk-pmw3610-driver
+      remote: efogdev
+      revision: zephyr-4.1
+      path: modules/zmk/zmk-pmw3610-driver
+    - name: zmk-report-rate-limit
+      remote: efogdev
+      revision: main
+      path: modules/zmk/zmk-report-rate-limit
+    - name: zmk-input-processor-xyz
+      remote: badjeff
+      revision: main
+      path: modules/zmk/zmk-input-processor-xyz
+    - name: zmk-rgbled-widget
+      remote: caksoylar
+      revision: main
+      path: modules/zmk/zmk-rgbled-widget
   self:
      path: config

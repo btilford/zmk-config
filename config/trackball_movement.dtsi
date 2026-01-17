@@ -1,26 +1,13 @@
 /* Trackball movement configuration for crosses right */
+/* Right side trackball: mouse cursor movement */
 
-#include "trackball_base.dtsi"
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
 
-/* Create input listener for PMW3610 trackball device */
-trackball_movement_listener: trackball_movement_listener {
-  compatible = "zmk,input-listener";
+/* The central listener is already enabled and configured in crosses_right.overlay */
+/* It references &trackball_central and applies rate limiting */
+
+/* Enable peripheral listener so both halves can communicate trackball data */
+&trackball_peripheral_listener {
   status = "okay";
-  device = <&trackball_central>;  /* Reference trackball device from gggw-zmk-keebs overlay */
-  warp {
-    layers = <MOTION>;
-    input-processors = <&zip_xy_scaler 3 1>;
-  };
-  precision {
-    layers = <FKEYS>;
-    input-processors = <&zip_xy_scaler 1 2>;
-  };
-};
-
-/* Alias mouse movement listener to our custom listener */
-&mmv_input_listener = &trackball_movement_listener;
-
-/* Disable scroll listener - not used on right side */
-&msc_input_listener {
-  status = "disabled";
 };
