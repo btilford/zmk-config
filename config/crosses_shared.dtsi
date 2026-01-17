@@ -29,6 +29,11 @@
                                     RC(4,3) RC(4,4) RC(4,5)       RC(4,6) RC(4,7) RC(4,8)
         >;
     };
+
+    zip_temp_layer: zip_temp_layer {
+        compatible = "zmk,input-processor-temp-layer";
+        #input-processor-cells = <2>;
+    };
 };
 
 &gggw_crosses_42_layout {
