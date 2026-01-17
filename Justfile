@@ -63,7 +63,7 @@ test-layouts:
     # Generate temp keymaps for testing
     mkdir -p build/keymaps
     python zmk_keymap_extractor.py "{{ config }}/corne.keymap" "{{ config }}/corne.conf" build/keymaps/corne-42-full.keymap -o build/keymaps
-    python zmk_keymap_extractor.py "{{ config }}/crosses.keymap" "{{ config }}/crosses.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
+    python zmk_keymap_extractor.py "{{ config }}/crosses_shared.dtsi" "{{ config }}/crosses.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
 
     # Test corne layout
     if keymap -c "{{ draw }}/corne-42.yaml" parse -z build/keymaps/corne-42-full.keymap >/dev/null 2>&1; then
@@ -101,8 +101,9 @@ draw-crosses:
 
 	echo "Generating crosses keymap diagram..."
 	mkdir -p build/keymaps build/diagrams build/temp
-	python zmk_keymap_extractor.py "{{ config }}/crosses.keymap" "{{ config }}/crosses.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
+	python zmk_keymap_extractor.py "{{ config }}/crosses_shared.dtsi" "{{ config }}/crosses.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
 	keymap -c "{{ draw }}/crosses-42.yaml" parse -z build/keymaps/crosses-42-full.keymap > build/temp/crosses-full.yaml
+	sed -i 's/zmk_keyboard: crosses-42-full/zmk_keyboard: gggw_crosses_42_layout/' build/temp/crosses-full.yaml
 	keymap -c "{{ draw }}/crosses-42.yaml" draw -j "{{ config }}/crosses-info.json" -l gggw_crosses_42_layout build/temp/crosses-full.yaml > build/diagrams/crosses-42-full.svg
 	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42-full.svg"
 	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42.svg"

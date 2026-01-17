@@ -28,7 +28,7 @@ def parse_keymap_defines(keymap_file):
     with open(keymap_file, "r") as f:
         content = f.read()
         # Find simple #define statements (not macro definitions)
-        define_pattern = r"#define\s+(\w+)(?:\s+([^\\\n]+))?"
+        define_pattern = r"#define\s+(\w+)(?:[ \t]+([^\n\\]+))?"
         matches = re.findall(define_pattern, content, re.MULTILINE)
         for match in matches:
             name, value = match
@@ -44,15 +44,27 @@ def extract_layers_from_base(base_file, defines):
     with open(base_file, "r") as f:
         lines = f.readlines()
 
+    # Create a set of defined macro names for easy checking
+    defined_names = set()
+    for d in defines:
+        # Handle -DNAME=VALUE and -DNAME
+        name = d[2:] if d.startswith("-D") else d
+        if "=" in name:
+            name = name.split("=", 1)[0]
+        defined_names.add(name)
+
     # Process conditional compilation
     processed_lines = []
     skipping = False
     for line in lines:
         if line.startswith("#ifdef REAL_POINTING_DEVICE"):
-            skipping = "REAL_POINTING_DEVICE" not in defines
+            skipping = "REAL_POINTING_DEVICE" not in defined_names
             continue
         elif line.startswith("#ifdef CONFIG_WIRELESS"):
-            skipping = "CONFIG_WIRELESS" not in defines
+            skipping = "CONFIG_WIRELESS" not in defined_names
+            continue
+        elif line.startswith("#ifdef CONFIG_POINTING"):
+            skipping = "CONFIG_POINTING" not in defined_names
             continue
         elif line.startswith("#else"):
             skipping = not skipping  # Flip the skipping state
@@ -115,7 +127,10 @@ def generate_dts_structure(layers):
         "#define DM 6",
         "#define FKEYS 7",
         "#define MOUSE 8",
-        "#define BTOOTH 9",
+        "#define MOUSE_SNIPE 9",
+        "#define MOUSE_HYPR 10",
+        "#define BTOOTH 11",
+        "#define SYS 12",
         "",
         "/ {",
         "    keymap: keymap {",
@@ -135,6 +150,7 @@ def generate_dts_structure(layers):
         "Function",
         "Mouse",
         "MouseSnipe",
+        "MouseHypr",
         "System",
     ]
 
