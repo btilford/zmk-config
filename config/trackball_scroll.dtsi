@@ -1,0 +1,12 @@
+/* Trackball scroll configuration for crosses left */
+/* Left side trackball: converts XY movement to scroll wheel events */
+
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
+
+/* Enable and configure the peripheral listener for scroll */
+&trackball_peripheral_listener {
+  status = "okay";
+  /* The device is already set to &trackball_peripheral_split in crosses.dtsi */
+  /* The overlay already applies zip_xy_to_scroll_mapper via trackball_peripheral_split */
+};

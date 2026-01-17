@@ -1,0 +1,13 @@
+/* Trackball movement configuration for crosses right */
+/* Right side trackball: mouse cursor movement */
+
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
+
+/* The central listener is already enabled and configured in crosses_right.overlay */
+/* It references &trackball_central and applies rate limiting */
+
+/* Enable peripheral listener so both halves can communicate trackball data */
+&trackball_peripheral_listener {
+  status = "okay";
+};

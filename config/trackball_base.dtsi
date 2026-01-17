@@ -1,0 +1,54 @@
+/* Base trackball configuration - shared components */
+
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/* Define complete mouse behaviors (replaces mouse.dtsi) */
+/* &mmv {
+  compatible = "zmk,behavior-mouse-move";
+  #binding-cells = <1>;
+  acceleration-exponent = <1>;
+  time-to-max-speed-ms = <500>;
+  delay-ms = <0>;
+};
+
+&msc {
+  compatible = "zmk,behavior-mouse-scroll";
+  #binding-cells = <1>;
+  acceleration-exponent = <0>;
+  time-to-max-speed-ms = <300>;
+  delay-ms = <0>;
+};
+
+&mkp {
+  compatible = "zmk,behavior-mouse-button";
+  #binding-cells = <1>;
+}; */
+
+/* Define input scalers */
+/* zip_xy_scaler: zip_xy_scaler {
+  compatible = "zmk,input-processor-scaler";
+  #input-processor-cells = <2>;
+  type = <INPUT_EV_REL>;
+  codes = <INPUT_REL_X INPUT_REL_Y>;
+  track-remainders;
+};
+
+zip_scroll_scaler: zip_scroll_scaler {
+  compatible = "zmk,input-processor-scaler";
+  #input-processor-cells = <2>;
+  type = <INPUT_EV_REL>;
+  codes = <INPUT_REL_WHEEL INPUT_REL_HWHEEL>;
+  track-remainders;
+}; */
+
+/* Mouse movement macros */
+#define U_MS_U &mmv MOVE_UP
+#define U_MS_D &mmv MOVE_DOWN
+#define U_MS_L &mmv MOVE_LEFT
+#define U_MS_R &mmv MOVE_RIGHT
+#define U_WH_U &msc SCRL_UP
+#define U_WH_D &msc SCRL_DOWN
+#define U_WH_L &msc SCRL_LEFT
+#define U_WH_R &msc SCRL_RIGHT

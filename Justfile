@@ -4,7 +4,7 @@ default:
 config := absolute_path('config')
 build := absolute_path('.build')
 out := absolute_path('firmware')
-draw := absolute_path('draw')
+draw := absolute_path('keymap-drawer')
 
 # parse build.yaml and filter targets by expression
 _parse_targets $expr:
@@ -46,20 +46,94 @@ clean:
     rm -rf {{ build }} {{ out }}
 
 # clear all automatically generated files
-clean-all: clean
+clean-all: clean clean-generated
     rm -rf .west zmk
 
 # clear nix cache
 clean-nix:
     nix-collect-garbage --delete-old
 
-# parse & plot keymap
-draw:
+# test keymap-drawer layout compatibility
+test-layouts:
     #!/usr/bin/env bash
     set -euo pipefail
-    keymap -c "{{ draw }}/config.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >"{{ draw }}/base.yaml"
-    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/base.yaml"
-    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/base.yaml" -k "ferris/sweep" >"{{ draw }}/base.svg"
+
+    echo "Testing keymap-drawer layout compatibility..."
+
+    # Generate temp keymaps for testing
+    mkdir -p build/keymaps
+    python zmk_keymap_extractor.py "{{ config }}/corne.keymap" "{{ config }}/corne.conf" build/keymaps/corne-42-full.keymap -o build/keymaps
+    python zmk_keymap_extractor.py "{{ config }}/crosses.keymap" "{{ config }}/crosses.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
+
+    # Test corne layout
+    if keymap -c "{{ draw }}/corne-42.yaml" parse -z build/keymaps/corne-42-full.keymap >/dev/null 2>&1; then
+        echo "✓ Corne layout: Compatible"
+    else
+        echo "✗ Corne layout: Failed - check configuration"
+    fi
+
+    # Test crosses layout
+    if keymap -c "{{ draw }}/crosses-42.yaml" parse -z build/keymaps/crosses-42-full.keymap >/dev/null 2>&1; then
+        echo "✓ Crosses layout: Compatible"
+    else
+        echo "✗ Crosses layout: Failed - check configuration"
+    fi
+
+# generate corne keymap diagram
+draw-corne:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	echo "Generating corne keymap diagram..."
+	mkdir -p build/keymaps build/diagrams build/temp
+	python zmk_keymap_extractor.py "{{ config }}/corne.keymap" "{{ config }}/corne.conf" build/keymaps/corne-42-full.keymap -o build/keymaps
+	keymap -c "{{ draw }}/corne-42.yaml" parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
+	sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
+	keymap -c "{{ draw }}/corne-42.yaml" draw build/temp/corne-full.yaml > build/diagrams/corne-42-full.svg
+	cp build/diagrams/corne-42-full.svg "{{ draw }}/corne-42-full.svg"
+	echo "✓ Generated build/diagrams/corne-42-full.svg"
+	echo "✓ Updated keymap-drawer/corne-42-full.svg"
+
+# generate crosses keymap diagram
+draw-crosses:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	echo "Generating crosses keymap diagram..."
+	mkdir -p build/keymaps build/diagrams build/temp
+	python zmk_keymap_extractor.py "{{ config }}/crosses.keymap" "{{ config }}/crosses.conf" build/keymaps/crosses-42-full.keymap -o build/keymaps
+	keymap -c "{{ draw }}/crosses-42.yaml" parse -z build/keymaps/crosses-42-full.keymap > build/temp/crosses-full.yaml
+	keymap -c "{{ draw }}/crosses-42.yaml" draw -j "{{ config }}/crosses-info.json" -l gggw_crosses_42_layout build/temp/crosses-full.yaml > build/diagrams/crosses-42-full.svg
+	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42-full.svg"
+	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42.svg"
+	echo "✓ Generated build/diagrams/crosses-42-full.svg"
+	echo "✓ Updated keymap-drawer/crosses-42-full.svg"
+	echo "✓ Updated keymap-drawer/crosses-42.svg"
+
+# clean generated files
+clean-generated:
+    rm -rf build/
+
+# generate both keymap diagrams
+draw: test-layouts
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Generating keymap diagrams..."
+
+    if just draw-corne; then
+        echo "✓ Corne diagram generated successfully"
+    else
+        echo "⚠ Corne diagram failed, continuing..."
+    fi
+
+    if just draw-crosses; then
+        echo "✓ Crosses diagram generated successfully"
+    else
+        echo "⚠ Crosses diagram failed, continuing..."
+    fi
+
+    echo "Keymap generation complete. Check for any warnings above."
 
 # initialize west
 init:

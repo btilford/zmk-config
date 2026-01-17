@@ -1,9 +1,20 @@
+# Virtual environments
 .venv/
+
+# Direnv cache
+.direnv/
+
+# ZMK build artifacts
 .zmk/
-.west/
-modules/
-zephyr/
+.build/
 build/
+
+# Zephyr West Workspace and Modules
+# These are managed by 'west' and should not be committed
+.west/              # West workspace metadata
+modules/            # ZMK modules and dependencies
+zephyr/             # Zephyr RTOS source code
+gggw-zmk-keebs/     # Custom keyboard definitions
 zmk/
 zmk-leader-key/
 zmk-auto-layer/
@@ -459,4 +470,18 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-.build/
+# ZMK Generated Files
+build/              # Generated keymaps, diagrams, and temp files
+.generated/         # Alternative generated files location
+
+# Zephyr West Modules (do not commit - managed by west)
+**/gggw-zmk-keebs/     # Custom keyboard definitions
+gggw-zmk-keebs/     # Custom keyboard definitions
+firmware/
+zmk-input-processor-xyz/
+zmk-pmw3610-driver/
+zmk-report-rate-limit/
+zmk-rgbled-widget/
+modules/
+zephyr/
+.west/
