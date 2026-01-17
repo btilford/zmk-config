@@ -36,8 +36,3 @@
 };
 
 #include "base.keymap"
-
-/* Trackball configuration is handled by the gggw-zmk-keebs module overlays:
- * - Left side: trackball_peripheral_split sends scroll events (via zip_xy_to_scroll_mapper)
- * - Right side: trackball_central_listener handles movement, trackball_peripheral_listener receives scroll
- */
