@@ -1,37 +1,61 @@
-# ZMK Firmware Configuration: Final Result
+# ZMK Firmware Fixes & Configuration: Crosses Keyboard
 
-We have successfully implemented advanced mouse layers and resolved the hardware conflicts preventing the trackballs from functioning correctly.
+This document provides a comprehensive technical record of the fixes, hardware resolutions, and feature implementations for the Crosses keyboard.
+
+---
 
 ## 🚀 Successfully Implemented Features
 
-### 1. Advanced Mouse Layers
+### 1. Advanced Mouse layers & Trackball Logic
 - **Auto-Mouse Layer**: Moving the Right trackball automatically activates the `MOUSE` layer (Layer 8) for 1000ms.
-- **Snipe Mode**: Activated via `MOUSE_SNIPE` layer. Cursor speed is slowed (1/4 scaling) for precision.
-- **Hyper Mode**: Activated via `MOUSE_HYPR` layer. Cursor speed is accelerated (2x scaling) for fast movement.
-- **Scroll Scaling**: Snipe and Hyper modes also apply scaling to scrolling on the left trackball (1/2x and 4x respectively).
-- **Inverted Scroll**: Vertical scrolling on the left trackball has been inverted for a "natural" feel (pull down to scroll up).
+- **Snipe Mode**: Activated via `MOUSE_SNIPE` layer. Reduces cursor speed (1/4 scaling) for precision.
+- **Hyper Mode**: Activated via `MOUSE_HYPR` layer. Accelerates cursor speed (2x move, 4x scroll scaling).
+- **Inverted Scroll**: Vertical scrolling on the left trackball is inverted for a natural "pull to scroll" feel (pull down to scroll up).
+- **Split Strategy**: 
+    - **Left Half**: Dedicated scrolling via `zip_xy_to_scroll_mapper`.
+    - **Right Half**: Cursor movement and remote scroll listener.
+- **Stability**: SPI frequency locked at **1MHz** with internal pull-ups enabled for reliable PMW3610 sensor data.
 
-### 2. Resolved Hardware Conflicts
-- **SPI/I2C Collision**: Explicitly disabled I2C and removed the OLED display node. This cleared pins **D2** and **D3** on the `nice!nano_v2`, allowing the trackball's SPI bus to operate without interference.
-- **Board Correction**: Unified the build on **`nice_nano_v2`** to ensure correct pin mappings for the actual hardware.
-
----
-
-## ⚠️ Unresolved Hardware Indicator Case (Blue LED)
-Despite multiple attempts to disable the blue status LED on the **Left Half** via devicetree (deleting nodes, redirecting aliases), the LED continues to flash moderately rapidly.
-
-**Technical Findings:**
-- The LED is likely being driven by the **Matrix Scanner** because it shares a physical pin (**P0.15**) with Column 2 of the keys.
-- If the LED persists even when no Bluetooth connection is being sought, it is a hardware-level reaction to the pin being toggled during the matrix scan and cannot be fully silenced in software without disabling the keys in that column.
+### 2. Matrix Fix (Row Shift Resolution)
+- **Issue**: Rows appeared to be shifted up by one. The default 42-key layout expected a 5-row matrix but skipped physical Row 0.
+- **Fix**: Implemented `shifted_transform` in `crosses_shared.dtsi`.
+- **Logic**: Maps the logical 42-key layout to physical matrix rows **1, 2, 3, and 4**. This correctly aligns the top key row (Q-P) with physical Row 1 on the Crosses hardware.
 
 ---
 
-## Final Solution Status
-- **Movement**: Working (Right side, auto-layering enabled).
-- **Scrolling**: Working (Left side).
-- **Advanced Modes**: Snipe (slow) and Hyper (fast) are fully functional.
-- **Power Optimization**: Logging and Display are disabled for maximum battery life.
+## 🛠️ Hardware & Build Resolutions
 
-## Firmware Files
+### 1. Pin Conflict & Peripheral Fixes
+- **SPI/I2C Collision**: Explicitly disabled the `i2c0` bus and removed the `nice_view` shields to free up pins **D2 (P0.17)** and **D3 (P0.20)** for the PMW3610 trackball sensor.
+- **Driver Enablement**: Created side-specific `.conf` files (`config/crosses_left.conf` and `config/crosses_right.conf`) to explicitly enable the PMW3610 driver, resolving linker errors during initialization.
+- **Board Correction**: Unified the build on **`nice_nano_v2`** to ensure accurate pin mappings and clock speeds.
+
+### 2. Technical Pin Assignments
+| Pin | Function | Use Case | Status |
+| :--- | :--- | :--- | :--- |
+| **D2 (P0.17)** | SPI SCK | Trackball Clock | **Resolved** (Disabled I2C) |
+| **D3 (P0.20)** | Reserved | Reserved | **Resolved** (Disabled I2C) |
+| **D1 (P0.06)** | SPI MOSI/MISO | Trackball Data | No conflict |
+| **D0 (P0.08)** | SPI CS | Trackball Select | No conflict |
+| **D15 (P0.15)**| Blue LED | Matrix Col 2 | **Active** (Hardware Sharing) |
+
+---
+
+## ⚠️ Known Limitations
+
+### Persistent Blue LED (Left Half)
+The blue status LED on the left controller flashes during matrix scanning and cannot be silenced in software.
+- **Root Cause**: The physical LED shares **P0.15** with Column 2 of the key matrix. 
+- **Finding**: Electrical activity from the matrix scanner toggling the pin is what drives the LED, independent of ZMK status software.
+
+---
+
+## 📂 Build System & Tooling
+- **Justfile**: Corrected paths for `crosses.keymap` and `crosses-info.json` (removing incorrect `-42` suffixes).
+- **Verification Commands**:
+    - **Build**: `just build crosses` (Success generates `zmk.uf2` in `firmware/`).
+    - **Diagrams**: `just draw-crosses` (Generates SVG diagrams in `keymap-drawer/`).
+
+### Firmware Files
 - [crosses_42_left.uf2](file:///home/btilford/Projects/keyboard/zmk-config/firmware/crosses_42_left.uf2)
 - [crosses_42_right.uf2](file:///home/btilford/Projects/keyboard/zmk-config/firmware/crosses_42_right.uf2)
