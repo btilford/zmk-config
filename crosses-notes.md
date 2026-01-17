@@ -9,6 +9,7 @@ We have successfully implemented advanced mouse layers and resolved the hardware
 - **Snipe Mode**: Activated via `MOUSE_SNIPE` layer. Cursor speed is slowed (1/4 scaling) for precision.
 - **Hyper Mode**: Activated via `MOUSE_HYPR` layer. Cursor speed is accelerated (2x scaling) for fast movement.
 - **Scroll Scaling**: Snipe and Hyper modes also apply scaling to scrolling on the left trackball (1/2x and 4x respectively).
+- **Inverted Scroll**: Vertical scrolling on the left trackball has been inverted for a "natural" feel (pull down to scroll up).
 
 ### 2. Resolved Hardware Conflicts
 - **SPI/I2C Collision**: Explicitly disabled I2C and removed the OLED display node. This cleared pins **D2** and **D3** on the `nice!nano_v2`, allowing the trackball's SPI bus to operate without interference.

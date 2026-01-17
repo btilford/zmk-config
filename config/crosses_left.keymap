@@ -58,5 +58,5 @@
 &{/split_inputs/trackball_peripheral_split@0} {
     /* device reference via path is robust */
     device = <&{/soc/spi@40004000/trackball_peripheral@0}>;
-    input-processors = <&zip_xy_to_scroll_mapper>, <&zip_ble_report_rate_limit>;
+    input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_transform 4>, <&zip_ble_report_rate_limit>;
 };
