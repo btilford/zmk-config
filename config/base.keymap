@@ -286,14 +286,14 @@ ZMK_BASE_LAYER(Function,
 ZMK_BASE_LAYER(Mouse,
 &trans  &trans  &trans          &mmv MOVE_UP    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &lt MOUSE_SNIPE A       &mkp RCLK       &mkp MCLK       &mkp LCLK        &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &lt MOUSE_HYPR Z  &trans,
-&trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+&trans  &lt MOUSE_HYPR Z        &trans       &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
                                 &trans          &trans           &trans, /*|*/  &mkp LCLK  &mkp RCLK  &trans
 )
 #else 
 ZMK_BASE_LAYER(Mouse,
 &trans  &trans  &trans          &mmv MOVE_UP    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &lt MOUSE_SNIPE A &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &MOUSE_HYPR Z  &trans,
-&trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+&trans  &lt MOUSE_HYPR Z  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
                                 &trans          &trans           &trans, /*|*/  &mkp LCLK  &mkp RCLK  &trans
 )
 #endif

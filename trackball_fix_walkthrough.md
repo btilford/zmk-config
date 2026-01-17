@@ -29,6 +29,9 @@ Due to the physical wiring of the Crosses PCB, there is a fundamental pin confli
 ## Final Solution Status
 - **Movement**: The Right trackball controls the cursor with 2:1 scaling.
 - **Scrolling**: The Left trackball controls vertical/horizontal scrolling.
+- **Sniper Mode**: Hold the `A` key in the Mouse layer to slow down movement and scrolling by 4x.
+- **Hyper Mode**: Hold the `Z` key in the Mouse layer to speed up movement by 2x and scrolling by 4x.
+- **Auto-Mouse**: Moving the Right trackball automatically activates the `MOUSE` layer.
 - **Battery Life**: USB Serial Logging has been **disabled** in this final version to ensure maximum battery efficiency.
 
 ## Firmware Files
