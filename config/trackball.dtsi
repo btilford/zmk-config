@@ -8,11 +8,11 @@
   status = "okay";
   device = <&trackball_central>;  /* Reference device from right overlay */
   warp {
-    layers = <MOTION>;
+    layers = <MOUSE_HYPR>;
     /* input-processors = <&zip_xy_scaler 3 1>; */
   };
   precision {
-    layers = <FKEYS>;
+    layers = <MOUSE_SNIPE>;
     /* input-processors = <&zip_xy_scaler 1 2>; */
   };
 };
@@ -22,11 +22,11 @@ trackball_scroll_fallback: trackball_scroll_fallback {
   status = "okay";
   device = <&trackball_peripheral>;  /* Reference device from left overlay */
   warp {
-    layers = <MOTION>;
+    layers = <MOUSE_HYPR>;
     /* input-processors = <&zip_scroll_scaler 2 1>; */
   };
   precision {
-    layers = <FKEYS>;
+    layers = <MOUSE_SNIPE>;
     /* input-processors = <&zip_scroll_scaler 1 2>; */
   };
 };

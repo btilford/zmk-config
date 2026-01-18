@@ -283,11 +283,13 @@ ZMK_BASE_LAYER(Function,
 )
 
 #ifndef REAL_POINTING_DEVICE
-#include "emulated-mouse.keymap"
-#else
-#include "real-pointing-device.keymap"
-#endif
-
+// emulated mouse
+ZMK_BASE_LAYER(Mouse,
+&trans  &trans              &trans          &mmv MOVE_UP    &trans           &trans, /*|*/  &trans          &lt MOUSE_SNIPE A          &trans          &trans           &trans &trans,
+&trans  &lt MOUSE_SNIPE A   &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP    &msc SCRL_RIGHT  &lt MOUSE_HYPR Z &trans,
+&trans  &lt MOUSE_HYPR Z    &trans          &trans          &trans           &trans, /*|*/  &trans          &trans          &trans          &trans           &trans &trans,
+                                            &trans          &trans           &trans, /*|*/  &mkp LCLK       &mkp RCLK       &trans
+)
 ZMK_BASE_LAYER(MouseSnipe,
 &trans  &trans  &trans          &trans    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
 &trans  &trans  &trans  &trans  &trans  &trans, /*|*/  &trans  &trans &trans  &trans  &trans  &trans,
@@ -300,6 +302,29 @@ ZMK_BASE_LAYER(MouseHypr,
 &trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
                                 &trans          &trans           &trans, /*|*/  &trans  &trans  &trans
 )
+#else
+// real pointing device
+ZMK_BASE_LAYER(Mouse,
+&trans  &trans  &trans          &trans           &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+&trans  &lt MOUSE_SNIPE A       &mkp RCLK       &mkp MCLK       &mkp LCLK        &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &lt MOUSE_HYPR Z  &trans,
+&trans  &lt MOUSE_HYPR Z        &trans       &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+                                &trans          &trans           &trans, /*|*/  &mkp LCLK  &mkp RCLK  &trans
+)
+ZMK_BASE_LAYER(MouseSnipe,
+&trans  &trans  &trans          &trans    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+&trans  &trans  &mkp RCLK       &mkp MCLK       &mkp LCLK  &trans, /*|*/  &trans  &trans &trans  &trans  &trans  &trans,
+&trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+                                &trans          &trans           &trans, /*|*/  &trans  &trans  &trans
+)
+ZMK_BASE_LAYER(MouseHypr,
+&trans  &trans  &trans          &trans    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+&trans  &trans  &mkp RCLK       &mkp MCLK       &mkp LCLK  &trans, /*|*/  &trans  &trans &trans  &trans  &trans  &trans,
+&trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
+                                &trans          &trans           &trans, /*|*/  &trans  &trans  &trans
+)
+#endif
+
+
 // -----------------------------------------------------------------------------------------
 // |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
 // | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
