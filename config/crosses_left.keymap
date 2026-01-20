@@ -6,13 +6,14 @@
     chosen {
         zephyr,console = &cdc_acm_uart;
         zephyr,shell-uart = &cdc_acm_uart;
-        /delete-property/ zephyr,display;
     };
 };
 
 &i2c0 {
-    status = "disabled";
+    status = "okay";
 };
+
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 4  // Default is 10; reduce for slower scroll
 
 &zephyr_udc0 {
     cdc_acm_uart: cdc_acm_uart {
@@ -60,3 +61,4 @@
     device = <&{/soc/spi@40004000/trackball_peripheral@0}>;
     input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_transform 4>, <&zip_ble_report_rate_limit>;
 };
+

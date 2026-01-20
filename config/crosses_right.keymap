@@ -6,12 +6,11 @@
     chosen {
         zephyr,console = &cdc_acm_uart;
         zephyr,shell-uart = &cdc_acm_uart;
-        /delete-property/ zephyr,display;
     };
 };
 
 &i2c0 {
-    status = "disabled";
+    status = "okay";
 };
 
 &zephyr_udc0 {
@@ -58,30 +57,30 @@
     status = "okay";
     device = <&{/soc/spi@40004000/trackball_central@0}>;
     /* device = <&trackball_central>; already set by module but path is safer here */
-    input-processors = <&zip_xy_scaler 2 1>, <&zip_ble_report_rate_limit>, <&zip_temp_layer MOUSE 1000>;
+    input-processors = <&zip_xy_scaler 2 1>, <&zip_ble_report_rate_limit>, <&zip_temp_layer MOUSE 767>;
 
     snipe {
         layers = <MOUSE_SNIPE>;
-        input-processors = <&zip_xy_scaler 1 4>;
+        input-processors = <&zip_xy_scaler 1 6>;
     };
 
     hyper {
         layers = <MOUSE_HYPR>;
-        input-processors = <&zip_xy_scaler 2 1>;
+        input-processors = <&zip_xy_scaler 4 1>;
     };
 };
 
 &{/trackball_peripheral_listener} {
     status = "okay";
-    input-processors = <&zip_scroll_scaler 2 1>;
+    input-processors = <&zip_scroll_scaler 1 1>, <&zip_temp_layer MOUSE 567>;
 
     snipe {
         layers = <MOUSE_SNIPE>;
-        input-processors = <&zip_scroll_scaler 1 2>;
+        input-processors = <&zip_scroll_scaler 1 10>;
     };
 
     hyper {
         layers = <MOUSE_HYPR>;
-        input-processors = <&zip_scroll_scaler 4 1>;
+        input-processors = <&zip_scroll_scaler 8 1>;
     };
 };
