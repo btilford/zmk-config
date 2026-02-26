@@ -13,7 +13,7 @@
     status = "okay";
 };
 
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 4  // Default is 10; reduce for slower scroll
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 2  // Default is 10; reduce for slower scroll
 
 &zephyr_udc0 {
     cdc_acm_uart: cdc_acm_uart {

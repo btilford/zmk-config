@@ -72,7 +72,7 @@
 
 &{/trackball_peripheral_listener} {
     status = "okay";
-    input-processors = <&zip_scroll_scaler 1 5>, <&zip_temp_layer MOUSE 567>;
+    input-processors = <&zip_scroll_scaler 1 8>, <&zip_temp_layer MOUSE 567>;
 
     snipe {
         layers = <MOUSE_SNIPE>;
