@@ -24,8 +24,10 @@ jobs:
           pip install keymap-drawer pyelftools
       - name: Generate full keymaps
         run: |
-          python zmk_keymap_extractor.py config/corne-42.keymap config/corne-42.conf build/keymaps/corne-42-full.keymap -o build/keymaps
-          python zmk_keymap_extractor.py config/crosses-42.keymap config/crosses-42.conf build/keymaps/crosses-42-full.keymap -o build/keymaps
+          mkdir -p build/keymaps build/diagrams build/temp
+
+          python zmk_keymap_extractor.py config/corne.keymap config/corne-42.conf build/keymaps/corne-42-full.keymap -o build/keymaps
+          python zmk_keymap_extractor.py config/crosses_shared.dtsi config/crosses-42.conf build/keymaps/crosses-42-full.keymap -o build/keymaps
       - name: Generate diagrams
         run: |
           keymap -c keymap-drawer/corne-42.yaml parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
