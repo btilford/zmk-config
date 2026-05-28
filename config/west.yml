@@ -9,12 +9,6 @@ manifest:
       url-base: https://github.com/urob
     - name: Good-Great-Grand-Wonderful
       url-base: https://github.com/Good-Great-Grand-Wonderful
-    - name: efogdev
-      url-base: https://github.com/efogdev
-    - name: badjeff
-      url-base: https://github.com/badjeff
-    - name: caksoylar
-      url-base: https://github.com/caksoylar
   projects:
     - name: zmk
       remote: zmkfirmware
