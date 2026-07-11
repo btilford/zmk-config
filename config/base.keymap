@@ -214,124 +214,197 @@ ZMK_MACRO(leader_sft, bindings = <&sk LSHFT &leader>;)
 /* vim: set ft=c tw=146: */
 
 // -----------------------------------------------------------------------------------------
-// | TAB  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
-// | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
-// | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
-//                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
-
+// | TAB     | KP Q       | KP W    | KP E    | KP R     | KP T    | ║ | KP Y     | KP U    | KP I    | KP O    | KP P    | LT BTO |
+// | KP ESC  | 🏠GUI|A     | 🏠CTL|S  | 🏠SFT|D  | LT MOT   | 🏠ALT|G  | ║ | HMR RA   | TEXT|J  | 🏠SFT|K  | 🏠CTL|L  | 🏠GUI|;  | '      |
+// | MAGICS  | KP Z       | KP X    | KP C    | KP V     | KP B    | ║ | NUMPD|N  | MEDIA|M | ,       | .       | /       | MT RSH |
+//                     | SMARTN   | MOUSE|SPC | LDR     | MO TEX  | SYM|ENT | ALT    |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Base,
-&kp TAB    &kp Q       &kp W        &kp E          &kp R          &kp T,            /*|*/    &kp Y         &kp U         &kp I        &kp O          &kp P          &lt BTOOTH BSPC,
-&kp ESC    &hml LGUI A  &hml LCTRL S  &hml LSHIFT D   &lt MOTION F   &hml LALT G,       /*|*/    &hmr RALT H    &lt TEXT J &hmr RSHIFT K  &hmr RCTRL L    &hmr RGUI SEMI  &kp SQT,
-MAGIC_SHIFT  &kp Z   &kp X        &kp C          &kp V          &kp B,            /*|*/    &lt NUMPD N    &lt MEDIA M &kp COMMA     &kp DOT      &kp FSLH       &mt RSHFT RPAR,
-                                    SMART_NUM    &lt MOUSE SPACE &ldr        ,  /*|*/      &mo TEXT       &lt SYM RET &kp RALT
+    &kp TAB     &kp Q           &kp W        &kp E         &kp R        &kp T,       ║ &kp Y       &kp U       &kp I         &kp O        &kp P          &lt BTOOTH BSPC,
+    &kp ESC     &hml LGUI A     &hml LCTRL S &hml LSHIFT D &lt MOTION F &hml LALT G, ║ &hmr RALT H &lt TEXT J  &hmr RSHIFT K &hmr RCTRL L &hmr RGUI SEMI &kp SQT,
+    MAGIC_SHIFT &kp Z           &kp X        &kp C         &kp V        &kp B,       ║ &lt NUMPD N &lt MEDIA M &kp COMMA     &kp DOT      &kp FSLH       &mt RSHFT RPAR,
+                                             SMART_NUM   &lt MOUSE SPACE &ldr,       ║ &mo TEXT      &lt SYM RET  &kp RALT
 )
 
 
 // -----------------------------------------------------------------------------------------
-// |  TAB |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  | BKSP |
-// | CTRL |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
-// | SHFT |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
+// |        | 1       | 2       | 3       | 4      | 5       | ║ | 6      | 7       | 8       | 9       | 0      | BKSP   |
+// |        | HML LG  | HML LC  | HML LS  | $      | HML LA  | ║ | HMR RA | &       | HMR RS  | HMR RC  | HMR RG | \      |
+// |        |         | [       | `       | -      | {       | ║ | }      | =       |         | ]       | |      | ~      |
+//                     | GUI    |         | SPC     | ENT     |        | ALT    |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Symbol,
-&trans      &kp N1      &kp N2      &kp N3      &kp N4      &kp N5,                           /*|*/     &kp N6      &kp N7      &kp N8           &kp N9       &kp N0       &kp BSPC,
-&trans      &hml LGUI EXCL    &hml LCTRL AT      &hml LSFT HASH    &kp DLLR    &hml LALT PRCNT,   /*|*/      &hmr RALT CARET   &kp AMPS    &hmr RSFT KP_MULTIPLY  &hmr RCTL LPAR    &hmr RGUI RPAR    &kp BSLH,
-&trans      &trans      &kp LBKT      &kp GRAVE  &kp MINUS   &kp LBRC,  /*|*/     &kp RBRC  &kp EQUAL   &trans         &kp RBKT    &kp PIPE    &kp TILDE,
-                                    &kp LGUI    &trans      &kp SPACE,   /*|*/     &kp RET     &trans      &kp RALT
+    &trans   &kp N1         &kp N2        &kp N3         &kp N4    &kp N5,          ║ &kp N6          &kp N7    &kp N8                &kp N9         &kp N0         &kp BSPC,
+    &trans   &hml LGUI EXCL &hml LCTRL AT &hml LSFT HASH &kp DLLR  &hml LALT PRCNT, ║ &hmr RALT CARET &kp AMPS  &hmr RSFT KP_MULTIPLY &hmr RCTL LPAR &hmr RGUI RPAR &kp BSLH,
+    &trans   &trans         &kp LBKT      &kp GRAVE      &kp MINUS &kp LBRC,        ║ &kp RBRC        &kp EQUAL &trans                &kp RBKT       &kp PIPE       &kp TILDE,
+                                          &kp LGUI &trans         &kp SPACE,        ║ &kp RET        &trans    &kp RALT
 )
 
+// -----------------------------------------------------------------------------------------
+// |        | /      | 7      | 8      | 9      | *      | ║ |        |        |        |        |        |        |
+// |        | -      | 4      | 5      | 6      | +      | ║ |        |        |        |        |        |        |
+// |        |        | 1      | 2      | 3      | 0      | ║ |        | =      |        |        |        |        |
+//                     |        |        |        |        |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Numpad,
-&trans  &kp KP_DIVIDE &kp N7  &kp N8  &kp N9  &kp KP_MULTIPLY, /*|*/   &trans  &trans     &trans  &trans  &trans  &trans,
-&trans  &kp MINUS     &kp N4  &kp N5  &kp N6  &kp PLUS       , /*|*/   &trans  &trans     &trans  &trans  &trans  &trans,
-&trans  &trans        &kp N1  &kp N2  &kp N3  &kp N0         , /*|*/   &trans  &kp EQUAL  &trans  &trans  &trans  &trans,
-                              &trans  &trans  &trans         , /*|*/   &trans  &trans     &trans
-
+    &trans &kp KP_DIVIDE &kp N7 &kp N8 &kp N9 &kp KP_MULTIPLY, ║ &trans &trans    &trans &trans &trans &trans,
+    &trans &kp MINUS     &kp N4 &kp N5 &kp N6 &kp PLUS,        ║ &trans &trans    &trans &trans &trans &trans,
+    &trans &trans        &kp N1 &kp N2 &kp N3 &kp N0,          ║ &trans &kp EQUAL &trans &trans &trans &trans,
+                                &trans &trans        &trans,   ║ &trans &trans &trans
 )
 
+// -----------------------------------------------------------------------------------------
+// |        |        |        |        |        |        | ║ | HOME   | PGDN   | PGUP   | INS    |        | DEL    |
+// |        |        |        |        |        |        | ║ | LEFT   | DOWN   | UP     | RIGHT  | END    |        |
+// |        |        |        |        |        |        | ║ |        | APP    |        |        |        |        |
+//                     |        |        |        |        |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Motion,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &kp HOME  &kp PG_DN  &kp PG_UP  &kp INS    &trans   &kp DEL,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &kp LEFT  &kp DOWN   &kp UP     &kp RIGHT  &kp END  &trans,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans    &kp K_APP  &trans     &trans     &trans   &trans,
-                        &trans  &trans  &trans, /*|*/   &trans    &trans     &trans
+    &trans &trans &trans &trans &trans &trans, ║ &kp HOME &kp PG_DN &kp PG_UP &kp INS   &trans  &kp DEL,
+    &trans &trans &trans &trans &trans &trans, ║ &kp LEFT &kp DOWN  &kp UP    &kp RIGHT &kp END &trans,
+    &trans &trans &trans &trans &trans &trans, ║ &trans   &kp K_APP &trans    &trans    &trans  &trans,
+                         &trans &trans &trans, ║ &trans &trans &trans
 )
 
+// -----------------------------------------------------------------------------------------
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+// |        |        | CUT    | COPY   | PASTE  |        | ║ |        |        |        |        |        |        |
+//                     |        |        |        |        |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Text,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
-&trans  &trans  &kp C_AC_CUT  &kp C_AC_COPY  &kp C_AC_PASTE  &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
-                        &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
+    &trans &trans &trans       &trans        &trans         &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &trans &trans       &trans        &trans         &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &trans &kp C_AC_CUT &kp C_AC_COPY &kp C_AC_PASTE &trans, ║ &trans &trans &trans &trans &trans &trans,
+                               &trans &trans &trans,                ║ &trans        &trans         &trans
 )
 
+// -----------------------------------------------------------------------------------------
+// |        |        |         |        |         | KP CVO  | ║ | KP CBR |        |        |         | KP CPR |        |
+// |        |        | KP CST  |        | KP CPP  | KP CVO  | ║ | KP CBR |        |        |         |        |        |
+// |        |        |         |        |         | KP CMU  | ║ | KP CNE |        |        |         |        |        |
+//                     |        |        |        |         |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Media,
-&trans  &trans  &trans  &trans  &trans  &kp C_VOL_UP, /*|*/   &kp C_BRI_UP  &trans  &trans  &trans  &kp C_PREV  &trans,
-&trans  &trans  &kp C_STOP  &trans  &kp C_PP  &kp C_VOL_DN, /*|*/   &kp C_BRI_DN  &trans  &trans  &trans  &trans  &trans,
-&trans  &trans  &trans  &trans  &trans  &kp C_MUTE, /*|*/  &kp C_NEXT  &trans  &trans  &trans  &trans  &trans,
-                        &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
+    &trans &trans &trans     &trans &trans   &kp C_VOL_UP, ║ &kp C_BRI_UP &trans &trans &trans &kp C_PREV &trans,
+    &trans &trans &kp C_STOP &trans &kp C_PP &kp C_VOL_DN, ║ &kp C_BRI_DN &trans &trans &trans &trans     &trans,
+    &trans &trans &trans     &trans &trans   &kp C_MUTE,   ║ &kp C_NEXT   &trans &trans &trans &trans     &trans,
+                             &trans &trans &trans,         ║ &trans &trans   &trans
 )
 
+// -----------------------------------------------------------------------------------------
+// |        |         | KP CAC  |        |        |        | ║ |        |        |        |        |        |        |
+// |        | KP CAC  |         |        |        |        | ║ |        |        |        |        |        |        |
+// |        |         |         |        |        |        | ║ |        |        |        |        |        |        |
+//                     |        |        |        |        |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Desktop,
-&trans  &trans/*close/exit*/  &kp C_AC_DESKTOP_SHOW_ALL_WINDOWS  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
-&trans  &kp C_AC_DESKTOP_SHOW_ALL_APPLICATIONS  &trans  &trans  &trans/*fullscreen*/  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
-                        &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
+    &trans &trans                                 &kp C_AC_DESKTOP_SHOW_ALL_WINDOWS &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &kp C_AC_DESKTOP_SHOW_ALL_APPLICATIONS &trans                            &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &trans                                 &trans                            &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+                                                                                    &trans &trans                                 &trans,║ &trans &trans &trans
 )
 
+// -----------------------------------------------------------------------------------------
+// |        |        |        |        |        |        | ║ |        |        |         |         |         |        |
+// | KP F1  | KP F2  | KP F3  | KP F4  | KP F5  | KP F6  | ║ | KP F7  | KP F8  | KP F9   | KP F10  | KP F11  | KP F12 |
+// |        |        |        |        |        |        | ║ |        |        |         |         |         |        |
+//                     |        |        |         |         |         |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Function,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/   &trans  &trans  &trans  &trans  &trans  &trans,
-&kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp F6, /*|*/   &kp F7  &kp F8  &kp F9  &kp F10  &kp F11  &kp F12,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
-                        &trans  &trans  &trans, /*|*/   &trans  &trans  &trans
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans  &trans  &trans,
+    &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6, ║ &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12,
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans  &trans  &trans,
+                         &trans &trans &trans, ║ &trans &trans &trans
 )
 
 #ifndef REAL_POINTING_DEVICE
 // emulated mouse
+// -----------------------------------------------------------------------------------------
+// |        |         |        | ↑      |        |        | ║ |         | LT MOU |         |         |        |        |
+// |        | LT MOU  | ←      | ↓      | →      |        | ║ | MSC SC  | S↓     | S↑      | MSC SC  | LT MOU |        |
+// |        | LT MOU  |        |        |        |        | ║ |         |        |         |         |        |        |
+//                     |         |        |         | LCLK    | RCLK   |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Mouse,
-&trans  &trans              &trans          &mmv MOVE_UP    &trans           &trans, /*|*/  &trans          &lt MOUSE_SNIPE A          &trans          &trans           &trans &trans,
-&trans  &lt MOUSE_SNIPE A   &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans, /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP    &msc SCRL_RIGHT  &lt MOUSE_HYPR Z &trans,
-&trans  &lt MOUSE_HYPR Z    &trans          &trans          &trans           &trans, /*|*/  &trans          &trans          &trans          &trans           &trans &trans,
-                                            &trans          &trans           &trans, /*|*/  &mkp LCLK       &mkp RCLK       &trans
+    &trans &trans            &trans         &mmv MOVE_UP   &trans          &trans, ║ &trans         &lt MOUSE_SNIPE A &trans       &trans          &trans           &trans,
+    &trans &lt MOUSE_SNIPE A &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &trans, ║ &msc SCRL_LEFT &msc SCRL_DOWN    &msc SCRL_UP &msc SCRL_RIGHT &lt MOUSE_HYPR Z &trans,
+    &trans &lt MOUSE_HYPR Z  &trans         &trans         &trans          &trans, ║ &trans         &trans            &trans       &trans          &trans           &trans,
+                                            &trans &trans            &trans,       ║ &mkp LCLK      &mkp RCLK       &trans
 )
+// -----------------------------------------------------------------------------------------
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+//                     |        |        |        |        |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(MouseSnipe,
-&trans  &trans  &trans          &trans    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/  &trans  &trans &trans  &trans  &trans  &trans,
-&trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
-                                &trans          &trans           &trans, /*|*/  &trans  &trans  &trans
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+                         &trans &trans &trans, ║ &trans &trans &trans
 )
+// -----------------------------------------------------------------------------------------
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+// |        |        |        |        |        |        | ║ |        |        |        |        |        |        |
+//                     |        |        |        |        |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(MouseHypr,
-&trans  &trans  &trans          &trans    &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
-&trans  &trans  &trans  &trans  &trans  &trans, /*|*/  &trans  &trans &trans  &trans  &trans  &trans,
-&trans  &trans  &trans          &trans          &trans           &trans, /*|*/  &trans  &trans  &trans  &trans  &trans  &trans,
-                                &trans          &trans           &trans, /*|*/  &trans  &trans  &trans
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+    &trans &trans &trans &trans &trans &trans, ║ &trans &trans &trans &trans &trans &trans,
+                         &trans &trans &trans, ║ &trans &trans &trans
 )
 #else
 // real pointing device
+// -----------------------------------------------------------------------------------------
+// |        |         |        |         |        |         | ║ | LCLK   | LCLK   |         |         |        |        |
+// |        |         |        |         |        |         | ║ | MSC SC | S↓     | S↑      | MSC SC  | LT MOU |        |
+// |        | LT MOU  | RCLK   | MKP MC  | LCLK   | LT MOU  | ║ | LT MOU |        |         |         |        |        |
+//                     |        |        |         |         | LCLK   | LCLK   |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(Mouse,
-&trans    &trans                  &trans          &trans          &trans           &trans,           /*|*/  &mkp LCLK  &mkp LCLK  &trans  &trans  &trans  &trans,
-&trans    &trans                  &trans          &trans          &trans           &trans,           /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &lt MOUSE_HYPR Z  &trans,
-&trans    &lt MOUSE_SNIPE Z       &mkp RCLK       &mkp MCLK       &mkp LCLK        &lt MOUSE_HYPR B, /*|*/  &lt MOUSE_SNIPE N  &trans  &trans  &trans  &trans  &trans,
-                                                  &trans          &trans           &trans,           /*|*/  &trans  &mkp LCLK  &mkp LCLK
+    &trans &trans            &trans    &trans    &trans    &trans,           ║ &mkp LCLK         &mkp LCLK      &trans       &trans          &trans           &trans,
+    &trans &trans            &trans    &trans    &trans    &trans,           ║ &msc SCRL_LEFT    &msc SCRL_DOWN &msc SCRL_UP &msc SCRL_RIGHT &lt MOUSE_HYPR Z &trans,
+    &trans &lt MOUSE_SNIPE Z &mkp RCLK &mkp MCLK &mkp LCLK &lt MOUSE_HYPR B, ║ &lt MOUSE_SNIPE N &trans         &trans       &trans          &trans           &trans,
+                                       &trans &trans            &trans,      ║ &trans    &mkp LCLK &mkp LCLK
 )
+// -----------------------------------------------------------------------------------------
+// |        |         |        |         |        |         | ║ | LCLK   | LCLK   |         |         |        |        |
+// |        |         |        |         |        |         | ║ | MSC SC | S↓     | S↑      | MSC SC  | LT MOU |        |
+// |        | LT MOU  | RCLK   | MKP MC  | LCLK   | LT MOU  | ║ | LT MOU |        |         |         |        |        |
+//                     |        |        |         |         | LCLK   | LCLK   |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(MouseSnipe,
-&trans    &trans                  &trans          &trans          &trans           &trans,           /*|*/  &mkp LCLK  &mkp LCLK  &trans  &trans  &trans  &trans,
-&trans    &trans                  &trans          &trans          &trans           &trans,           /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &lt MOUSE_HYPR Z  &trans,
-&trans    &lt MOUSE_SNIPE Z       &mkp RCLK       &mkp MCLK       &mkp LCLK        &lt MOUSE_HYPR B, /*|*/  &lt MOUSE_SNIPE N  &trans  &trans  &trans  &trans  &trans,
-                                                  &trans          &trans           &trans,           /*|*/  &trans  &mkp LCLK  &mkp LCLK
+    &trans &trans            &trans    &trans    &trans    &trans,           ║ &mkp LCLK         &mkp LCLK      &trans       &trans          &trans           &trans,
+    &trans &trans            &trans    &trans    &trans    &trans,           ║ &msc SCRL_LEFT    &msc SCRL_DOWN &msc SCRL_UP &msc SCRL_RIGHT &lt MOUSE_HYPR Z &trans,
+    &trans &lt MOUSE_SNIPE Z &mkp RCLK &mkp MCLK &mkp LCLK &lt MOUSE_HYPR B, ║ &lt MOUSE_SNIPE N &trans         &trans       &trans          &trans           &trans,
+                                       &trans &trans            &trans,      ║ &trans    &mkp LCLK &mkp LCLK
 )
+// -----------------------------------------------------------------------------------------
+// |        |         |        |         |        |         | ║ | LCLK   | LCLK   |         |         |        |        |
+// |        |         |        |         |        |         | ║ | MSC SC | S↓     | S↑      | MSC SC  | LT MOU |        |
+// |        | LT MOU  | RCLK   | MKP MC  | LCLK   | LT MOU  | ║ | LT MOU |        |         |         |        |        |
+//                     |        |        |         |         | LCLK   | LCLK   |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(MouseHypr,
-&trans    &trans                  &trans          &trans          &trans           &trans,           /*|*/  &mkp LCLK  &mkp LCLK  &trans  &trans  &trans  &trans,
-&trans    &trans                  &trans          &trans          &trans           &trans,           /*|*/  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &lt MOUSE_HYPR Z  &trans,
-&trans    &lt MOUSE_SNIPE Z       &mkp RCLK       &mkp MCLK       &mkp LCLK        &lt MOUSE_HYPR B, /*|*/  &lt MOUSE_SNIPE N  &trans  &trans  &trans  &trans  &trans,
-                                                  &trans          &trans           &trans,           /*|*/  &trans  &mkp LCLK  &mkp LCLK
+    &trans &trans            &trans    &trans    &trans    &trans,           ║ &mkp LCLK         &mkp LCLK      &trans       &trans          &trans           &trans,
+    &trans &trans            &trans    &trans    &trans    &trans,           ║ &msc SCRL_LEFT    &msc SCRL_DOWN &msc SCRL_UP &msc SCRL_RIGHT &lt MOUSE_HYPR Z &trans,
+    &trans &lt MOUSE_SNIPE Z &mkp RCLK &mkp MCLK &mkp LCLK &lt MOUSE_HYPR B, ║ &lt MOUSE_SNIPE N &trans         &trans       &trans          &trans           &trans,
+                                       &trans &trans            &trans,      ║ &trans    &mkp LCLK &mkp LCLK
 )
 #endif
 
 // -----------------------------------------------------------------------------------------
-// |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
-// | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
-// | SHFT |     |     |     |     |     |   |     |     |     |     |     |      |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
+// | BOOT   | DSC0    | BT BTD  | BT BTD  | BT BTD  | BT BTD  | ║ |        | USB    |        | TOG     | BT BTP | BOOT   |
+// | CLR    | BT0     | BT BTS  | BT BTS  | BT BTS  | BT BTS  | ║ |        |        |        |         |        |        |
+// | RST    | BT BTD  |         | BT BTC  |         | BLE     | ║ | BT BTN |        |        |         |        | RST    |
+//                     |        |        |        |         |        |        |
+// -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(System,
-&bootloader     &bt BT_DISC 0  &bt BT_DISC 1  &bt BT_DISC 2  &bt BT_DISC 3  &bt BT_DISC 4, /*|*/   &trans        &out OUT_USB  &trans  &out OUT_TOG  &bt BT_PRV  &bootloader,
-&bt BT_CLR_ALL  &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4 , /*|*/   &trans        &trans       &trans  &trans       &trans      &trans       ,
-&sys_reset      &bt BT_DISC    &trans         &bt BT_CLR     &trans         &out OUT_BLE , /*|*/   &bt BT_NXT    &trans       &trans  &trans       &trans      &sys_reset   ,
-                                              &trans         &trans         &trans       , /*|*/   &trans        &trans       &trans
+    &bootloader    &bt BT_DISC 0 &bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4, ║ &trans     &out OUT_USB &trans &out OUT_TOG &bt BT_PRV &bootloader,
+    &bt BT_CLR_ALL &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4,  ║ &trans     &trans       &trans &trans       &trans     &trans,
+    &sys_reset     &bt BT_DISC   &trans        &bt BT_CLR    &trans        &out OUT_BLE,  ║ &bt BT_NXT &trans       &trans &trans       &trans     &sys_reset,
+                                               &trans         &trans        &trans,       ║ &trans        &trans        &trans
 )

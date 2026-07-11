@@ -196,10 +196,18 @@ class DynamicKeyboardFormatter:
         while i < len(lines):
             line = lines[i]
 
-            # Check if this is the start of a ZMK_BASE_LAYER
-            if "ZMK_BASE_LAYER(" in line:
-                # Find the start of this layer block (including any preceding ASCII art)
-                block_start = self._find_layer_block_start(lines, i)
+            # Check if this is the start of a ZMK_BASE_LAYER *invocation* — not the
+            # macro's own "#define ZMK_BASE_LAYER(...)" declaration, which also
+            # contains this substring but must never be reformatted.
+            is_define_line = re.match(r"\s*#\s*define\s+ZMK_BASE_LAYER\b", line)
+            if "ZMK_BASE_LAYER(" in line and not is_define_line:
+                # Find the start of this layer block (including any preceding ASCII art).
+                # Must scan formatted_lines (the output built so far), not the original
+                # `lines`, since earlier reformatted layers may have a different line
+                # count than their source — an index from `lines` would misalign here.
+                block_start = self._find_layer_block_start(
+                    formatted_lines, len(formatted_lines)
+                )
 
                 # Parse the complete layer
                 layer_content, layer_end = self._extract_layer(lines, i)
@@ -227,22 +235,35 @@ class DynamicKeyboardFormatter:
 
     def _find_layer_block_start(self, lines: List[str], layer_start_idx: int) -> int:
         """Find the start of the layer block, including any preceding ASCII art comments"""
-        # Look backward from the ZMK_BASE_LAYER line to find ASCII art comments
+        # Look backward from the ZMK_BASE_LAYER line to find ASCII art comments.
+        # Blank lines between stacked/stale art blocks must not stop the scan early,
+        # otherwise old headers are left behind instead of being replaced.
         i = layer_start_idx - 1
+        block_start = layer_start_idx
         while i >= 0:
             line = lines[i].strip()
-            # Stop if we find a non-comment line (empty or code)
-            if not line or not (
+            if not line:
+                i -= 1
+                continue
+            is_comment = (
                 line.startswith("//") or line.startswith("/*") or line.startswith(" *")
-            ):
-                break
-            # If this looks like ASCII art (contains | or box drawing chars), keep going
-            if "|" in line or "─" in line or "═" in line:
+            )
+            stripped_marker = re.sub(r"^(//|/\*|\*)", "", line).strip()
+            is_dash_divider = bool(stripped_marker) and set(stripped_marker) <= {
+                "-",
+                "─",
+                "═",
+            }
+            is_art_comment = is_comment and (
+                "|" in line or "─" in line or "═" in line or is_dash_divider
+            )
+            if is_art_comment:
+                block_start = i
                 i -= 1
             else:
                 break
 
-        return i + 1
+        return block_start
 
     def _extract_layer(
         self, lines: List[str], start_idx: int
@@ -380,16 +401,29 @@ class DynamicKeyboardFormatter:
             line = re.sub(r"/\*\|?\*/", "", line)
             line = re.sub(r",\s*║\s*", ",", line)
 
-            parts = [part.strip() for part in line.split(",") if part.strip()]
-            if parts:
-                # Split multi-key entries
-                keys = []
-                for part in parts:
-                    part_keys = [k.strip() for k in part.split() if k.strip()]
-                    keys.extend(part_keys)
+            # Each comma-separated half (left/right) is a whitespace-separated
+            # run of bindings, where a binding is one "&behavior" token plus any
+            # following non-"&" param tokens (e.g. "&hml LGUI A", "&bt BT_SEL 0"),
+            # or a single bare macro token (e.g. "MAGIC_SHIFT").
+            halves = [half.strip() for half in line.split(",") if half.strip()]
+            keys = []
+            for half in halves:
+                keys.extend(self._split_binding_tokens(half))
+            if keys:
                 rows.append(keys)
 
         return rows
+
+    def _split_binding_tokens(self, text: str) -> List[str]:
+        """Split a run of bindings into individual '&behavior [params...]' groups"""
+        tokens = text.split()
+        groups: List[List[str]] = []
+        for token in tokens:
+            if token.startswith("&") or not groups:
+                groups.append([token])
+            else:
+                groups[-1].append(token)
+        return [" ".join(group) for group in groups]
 
     def _is_thumb_row(self, row: List[str]) -> bool:
         """Detect thumb rows (typically 6 or fewer keys)"""
@@ -549,32 +583,41 @@ class DynamicKeyboardFormatter:
     def _format_bindings_dynamic(
         self, key_rows: List[List[str]], analysis: Dict[str, Any]
     ) -> str:
-        """Format bindings with dynamic spacing"""
+        """Format bindings with dynamic spacing.
+
+        The mid-row comma (before ║) and the end-of-row comma are ZMK_BASE_LAYER
+        macro argument separators (name, LT, RT, LM, RM, LB, RB, LH, RH) — not
+        decoration. Dropping the mid-row comma, or adding one after the last row,
+        changes the macro's argument count and breaks the build.
+        """
         formatted_lines = []
         column_widths = analysis["column_widths"]
         separator_pos = analysis["separator_pos"]
         thumb_indent = analysis["thumb_indent"]
 
-        for row in key_rows:
+        for idx, row in enumerate(key_rows):
+            is_last_row = idx == len(key_rows) - 1
             if self._is_thumb_row(row):
-                # Thumb row with dynamic indentation
                 formatted = self._format_thumb_row_dynamic(
-                    row, column_widths, thumb_indent
+                    row, column_widths, thumb_indent, separator_pos, is_last_row
                 )
             else:
-                # Finger row with dynamic column widths
                 formatted = self._format_finger_row_dynamic(
-                    row, column_widths, separator_pos
+                    row, column_widths, separator_pos, is_last_row
                 )
 
-            formatted_lines.append(formatted + ",")
+            formatted_lines.append(formatted)
 
         return "\n".join(formatted_lines)
 
     def _format_finger_row_dynamic(
-        self, keys: List[str], column_widths: List[int], separator_pos: int
+        self,
+        keys: List[str],
+        column_widths: List[int],
+        separator_pos: int,
+        is_last_row: bool,
     ) -> str:
-        """Format finger row with dynamic spacing"""
+        """Format finger row with dynamic spacing, ║ pinned to separator_pos"""
         # Ensure 12 keys
         full_keys = (keys + [""] * 12)[:12]
 
@@ -587,16 +630,22 @@ class DynamicKeyboardFormatter:
             else:
                 formatted_parts.append(" " * width)
 
-        # Split at separator position
-        left_side = "".join(formatted_parts[:6]).rstrip()
-        right_side = "".join(formatted_parts[6:]).lstrip()
+        left_core = "".join(formatted_parts[:6]).rstrip()
+        left_side = ("    " + left_core + ",").ljust(separator_pos)
+        right_side = "".join(formatted_parts[6:]).rstrip()
+        trailing_comma = "" if is_last_row else ","
 
-        return f"    {left_side} ║ {right_side}".rstrip()
+        return f"{left_side}║ {right_side}{trailing_comma}"
 
     def _format_thumb_row_dynamic(
-        self, keys: List[str], column_widths: List[int], indent: int
+        self,
+        keys: List[str],
+        column_widths: List[int],
+        indent: int,
+        separator_pos: int,
+        is_last_row: bool,
     ) -> str:
-        """Format thumb row with dynamic indentation"""
+        """Format thumb row with dynamic indentation, ║ pinned to separator_pos"""
         # Ensure 6 thumb keys
         full_keys = (keys + [""] * 6)[:6]
 
@@ -609,12 +658,13 @@ class DynamicKeyboardFormatter:
             else:
                 formatted_thumbs.append(" " * width)
 
-        # Apply calculated indentation
         indent_spaces = " " * indent
-        left_thumbs = "".join(formatted_thumbs[:3]).rstrip()
-        right_thumbs = "".join(formatted_thumbs[3:]).lstrip()
+        left_core = "".join(formatted_thumbs[:3]).rstrip()
+        left_thumbs = (indent_spaces + left_core + ",").ljust(separator_pos)
+        right_thumbs = "".join(formatted_thumbs[3:]).rstrip()
+        trailing_comma = "" if is_last_row else ","
 
-        return f"{indent_spaces}{left_thumbs} ║ {right_thumbs}".rstrip()
+        return f"{left_thumbs}║ {right_thumbs}{trailing_comma}"
 
 
 def main():
