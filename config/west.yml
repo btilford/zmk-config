@@ -9,6 +9,8 @@ manifest:
       url-base: https://github.com/urob
     - name: Good-Great-Grand-Wonderful
       url-base: https://github.com/Good-Great-Grand-Wonderful
+    - name: caksoylar
+      url-base: https://github.com/caksoylar
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -36,5 +38,18 @@ manifest:
       revision: main
       path: modules/gggw-zmk-keebs
       import: config/west.yml
+    # Override gggw's floating `main` pin: rgbled-widget main now targets ZMK
+    # newer than v0.3 (zmk_endpoint_get_selected API) and fails to compile.
+    # Our own project entry takes precedence over the imported one.
+    - name: zmk-rgbled-widget
+      remote: caksoylar
+      revision: v0.3
+    # Corne Min (Mechboards): integrated nRF52840 boards corne_min_left/right.
+    # Only the board branch — the corne-min-rgbled branch duplicates the
+    # rgbled_adapter shield already provided by gggw's zmk-rgbled-widget import.
+    - name: corne-min-board
+      url: https://github.com/MechboardsLTD/zmk-module
+      revision: corne-min
+      path: modules/corne-min-board
   self:
      path: config

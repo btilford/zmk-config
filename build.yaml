@@ -31,3 +31,8 @@ include:
     shield: crosses_right
     artifact-name: crosses_42_right
 
+  - board: corne_min_left
+    artifact-name: corne_min_left
+  - board: corne_min_right
+    artifact-name: corne_min_right
+
