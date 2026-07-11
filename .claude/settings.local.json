@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C zmk log --oneline -1)",
+      "Bash(git -C modules/gggw-zmk-keebs branch -a)",
+      "mcp__io_github_brave_brave-search-mcp-server__brave_web_search",
+      "Bash(just update *)",
+      "Bash(just clean *)",
+      "Bash(just build *)",
+      "Bash(west boards *)",
+      "Bash(west list *)"
+    ],
+    "additionalDirectories": [
+      "/home/btilford/Documents/personal-notes/notes"
+    ]
+  }
+}
