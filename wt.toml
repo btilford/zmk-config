@@ -1,0 +1,17 @@
+# Worktrunk project config — https://worktrunk.dev/config/#project-configuration
+#
+# `wt step copy-ignored` copies gitignored files into a new worktree. This repo
+# keeps its west workspace (.west/, modules/, zmk/, zephyr/) gitignored but a
+# local build needs it, so copy everything except build artifacts and caches.
+[step.copy-ignored]
+exclude = [
+    ".build/",
+    "build/",
+    "firmware/",
+    ".direnv/",
+    ".ruff_cache/",
+    "keymap-drawer-env/",
+    ".venv/",
+    ".idea/",
+    ".claude/",
+]
