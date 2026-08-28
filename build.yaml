@@ -46,3 +46,18 @@ include:
   - board: corne_min_right
     artifact-name: corne_min_right
 
+  # Toucan2 (beekeeb). Left is the split central and carries the MIP display;
+  # right carries the Azoteq TPS43 trackpad. rgbled_adapter drives the XIAO's
+  # onboard RGB LED via caksoylar/zmk-rgbled-widget.
+  - board: seeeduino_xiao_ble
+    shield: toucan_left rgbled_adapter nice_view_gem
+    artifact-name: toucan2_left
+
+  - board: seeeduino_xiao_ble
+    shield: toucan_right rgbled_adapter
+    artifact-name: toucan2_right
+
+  # Flash to clear paired-BLE state when the halves refuse to talk.
+  - board: seeeduino_xiao_ble
+    shield: settings_reset
+    artifact-name: toucan2_settings_reset
