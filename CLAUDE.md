@@ -4,11 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-ZMK firmware configuration for two wireless split keyboards:
+ZMK firmware configuration for several wireless split keyboards:
 - **Corne** (nice_nano board, 42-key, no trackball)
+- **Corne Min** (Mechboards `corne_min_left` / `corne_min_right` integrated boards, 42-key)
 - **Crosses** (nice_nano_v2 board, 42-key, PMW3610 trackball — left half scrolls, right half moves cursor)
+- **Toucan2** (beekeeb, seeeduino_xiao_ble x2, 42-key, Azoteq TPS43 trackpad on the right half, memory-in-pixel display on the left)
 
-Both share `config/base.keymap` and `config/combos.dtsi` / `config/leader.dtsi` / `config/mouse.dtsi`.
+All of them share `config/base.keymap` and `config/combos.dtsi` / `config/leader.dtsi` / `config/mouse.dtsi`.
 
 ## Build commands
 
@@ -67,7 +69,8 @@ The `.envrc` (direnv) sets `ZEPHYR_SDK_INSTALL_DIR` and adds the ARM toolchain t
 | `config/trackball_base.dtsi` | Shared mouse behaviors and input scalers |
 | `config/trackball_scroll.dtsi` | Left-half: trackball → scroll |
 | `config/trackball_movement.dtsi` | Right-half: trackball → cursor movement |
-| `config/corne.conf` / `config/crosses.conf` | Kconfig overrides (Bluetooth, display, etc.) |
+| `config/toucan.keymap` | Toucan2 entry point: same shape as `corne.keymap`, plus overrides remapping the trackpad's layer numbers onto our layer order |
+| `config/corne.conf` / `config/crosses.conf` / `config/toucan.conf` | Kconfig overrides (Bluetooth, display, etc.) |
 | `config/west.yml` | West manifest: ZMK + all modules (urob helpers, PMW3610 driver, gggw-zmk-keebs, etc.) |
 | `build.yaml` | GitHub Actions build matrix |
 
@@ -89,7 +92,28 @@ The `.envrc` (direnv) sets `ZEPHYR_SDK_INSTALL_DIR` and adds the ARM toolchain t
 #endif
 ```
 
-`REAL_POINTING_DEVICE` is only defined in `crosses_shared.dtsi`, not in the Corne keymap.
+`REAL_POINTING_DEVICE` is only defined in `crosses_shared.dtsi`, not in the Corne or Toucan2 keymaps.
+
+### Toucan2 trackpad
+
+The trackpad hardware, its input processors and the split-input plumbing all
+live in the beekeeb module
+(`modules/zmk/zmk-keyboard-toucan2/boards/shields/toucan/toucan.dtsi`), so
+`config/toucan.keymap` does **not** use the `REAL_POINTING_DEVICE` machinery.
+What it does override is the module's hard-coded layer numbers, which are
+written against beekeeb's own 5-layer keymap:
+
+| Node | Module default | Ours | Why |
+|------|----------------|------|-----|
+| `is_touching_processor` | `&mo 4` (beekeeb MOUSE) | `&mo MOUSE` (8) | layer 4 is `TEXT` in our order |
+| `trackpad_listener/scroller` | `layers = <1 2>` | `layers = <MOUSE_HYPR>` (10) | 1/2 are `SYM`/`NUMPD` here, where scrolling is unwanted |
+
+Verify an override landed by grepping the generated devicetree:
+`grep -A6 is_touching_processor .build/toucan2_left/zephyr/zephyr.dts`
+
+Shield-level Kconfig (pointing, TPS43, split roles, sleep timeouts, display
+style) comes from the module's `toucan_left.conf` / `toucan_right.conf` and is
+applied automatically; `config/toucan.conf` only carries user preferences.
 
 ### Key ZMK modules (from `config/west.yml`)
 
@@ -99,6 +123,9 @@ The `.envrc` (direnv) sets `ZEPHYR_SDK_INSTALL_DIR` and adds the ARM toolchain t
 - `urob/zmk-tri-state` — tri-state (swapper) behavior
 - `efogdev/zmk-pmw3610-driver` — PMW3610 trackball driver (pinned to `zephyr-4.1` branch)
 - `Good-Great-Grand-Wonderful/gggw-zmk-keebs` — Crosses board/shield definitions
+- `beekeeb/zmk-keyboard-toucan2` — Toucan2 shields (`toucan_left`, `toucan_right`, `nice_view_gem`); sets `board_root: .`
+- `beekeeb/zmk_driver_azoteq` — Azoteq TPS43 trackpad driver (`CONFIG_INPUT_TPS43`)
+- `beekeeb/zmk-input-zoom` — pinch-to-zoom input processor used by `zip_zoom_mapper`
 
 ## Critical constraints
 

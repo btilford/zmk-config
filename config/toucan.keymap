@@ -1,0 +1,39 @@
+#define CONFIG_WIRELESS
+#define ZMK_BASE_LAYER(name, LT, RT, LM, RM, LB, RB, LH, RH)                   \
+    ZMK_LAYER(                                                                 \
+        name,                                                                  \
+                 LT RT                                                         \
+                 LM RM                                                         \
+                 LB RB                                                         \
+                 LH RH                                                         \
+    )
+
+#include "zmk-helpers/key-labels/42.h"
+#include "base.keymap"
+
+/* ---------------------------------------------------------------------------
+ * Azoteq TPS43 trackpad wiring.
+ *
+ * The physical trackpad, its input processors and the split input plumbing all
+ * come from the beekeeb module (modules/zmk/zmk-keyboard-toucan2, see
+ * boards/shields/toucan/toucan.dtsi). Only the layer numbers need remapping:
+ * the module's defaults are written against beekeeb's own 5-layer keymap,
+ * which does not match our layer order from base.keymap.
+ * ------------------------------------------------------------------------ */
+
+/* Touching the pad activates the MOUSE layer, mirroring the auto-mouse-layer
+ * behaviour the crosses trackball gets from `smart_mouse`. Module default was
+ * `&mo 4`, which is TEXT in our layer order. */
+&is_touching_processor {
+    bindings = <&mo MOUSE>;
+};
+
+/* Trackpad emits scroll instead of cursor movement while these layers are
+ * active. Module default was <1 2> (beekeeb NAV/SYM) = our SYM/NUMPD, where
+ * scrolling is not wanted. MOUSE_HYPR is reached from the MOUSE layer via
+ * `&lt MOUSE_HYPR Z`, so: touch pad -> MOUSE, hold Z -> scroll. */
+&trackpad_listener {
+    scroller {
+        layers = <MOUSE_HYPR>;
+    };
+};

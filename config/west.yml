@@ -15,6 +15,8 @@ manifest:
       url-base: https://github.com/badjeff
     - name: caksoylar
       url-base: https://github.com/caksoylar
+    - name: beekeeb
+      url-base: https://github.com/beekeeb
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -77,5 +79,23 @@ manifest:
       url: https://github.com/MechboardsLTD/zmk-module
       revision: corne-min
       path: modules/corne-min-board
+    # Toucan2 (beekeeb): 42-key split, 2x seeeduino_xiao_ble, Azoteq TPS43
+    # trackpad on the right half, memory-in-pixel display on the left.
+    # The module sets `board_root: .` so it supplies the toucan_left /
+    # toucan_right and nice_view_gem shields.
+    - name: zmk-keyboard-toucan2
+      remote: beekeeb
+      revision: main
+      path: modules/zmk/zmk-keyboard-toucan2
+    # Azoteq TPS43 trackpad driver (CONFIG_INPUT_TPS43).
+    - name: zmk_driver_azoteq
+      remote: beekeeb
+      revision: main
+      path: modules/zmk/zmk_driver_azoteq
+    # Pinch-to-zoom input processor used by toucan.dtsi's zip_zoom_mapper.
+    - name: zmk-input-zoom
+      remote: beekeeb
+      revision: main
+      path: modules/zmk/zmk-input-zoom
   self:
      path: config
