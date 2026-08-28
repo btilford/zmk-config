@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Branch scope — read this first
+
+**This branch (`add-crosses-v2`) builds Crosses v2 and nothing else.** It sits on
+ZMK `main` (Zephyr 4.x); `master` stays on ZMK `v0.3.0` for corne, Crosses v1 and
+Toucan2. That split is forced, not stylistic — see "Why v1 and v2 cannot share a
+manifest" below. Most of the notes further down describe `master`'s targets and
+do not apply here.
+
 ## What this repo is
 
 ZMK firmware configuration for two wireless split keyboards:
@@ -99,6 +107,49 @@ The `.envrc` (direnv) sets `ZEPHYR_SDK_INSTALL_DIR` and adds the ARM toolchain t
 - `urob/zmk-tri-state` — tri-state (swapper) behavior
 - `efogdev/zmk-pmw3610-driver` — PMW3610 trackball driver (pinned to `zephyr-4.1` branch)
 - `Good-Great-Grand-Wonderful/gggw-zmk-keebs` — Crosses board/shield definitions
+
+## Why v1 and v2 cannot share a manifest
+
+A west workspace resolves exactly one `zmk` revision, and Crosses v2's boards and
+PAW3222 stack only exist on ZMK `main`. That alone would force a split. But even
+setting ZMK aside, the two keyboards pull incompatible forks of the *same*
+devicetree binding:
+
+| | module | `#input-processor-cells` | used as |
+|---|---|---|---|
+| v2 | `badjeff/zmk-input-processor-report-rate-limit` | `1` | `<&zip_report_rate_limit 2>` in `crosses_v2.dts` |
+| v1 | `efogdev/zmk-report-rate-limit` (via gggw) | `0` | `CONFIG_ZMK_INPUT_PROCESSOR_REPORT_RATE_LIMIT_DEFAULT=2`, a Kconfig the other fork lacks |
+
+Both declare `compatible: zmk,input-processor-report-rate-limit`. West happily
+clones both (the project names differ), then the devicetree build fails:
+
+    devicetree error: both .../zmk-input-processor-report-rate-limit/... and
+    .../zmk-report-rate-limit/... have 'compatible: zmk,input-processor-report-rate-limit'
+
+Neither fork can substitute for the other — the cell counts differ. Blocking one
+via `import: name-blocklist` therefore breaks whichever board needed it. Revisit
+only if gggw converges the two upstreams.
+
+Related trap, same family: on ZMK `main` the Zephyr hardware-model-v2 rework
+renamed the boards. `nice_nano_v2` is no longer a valid board name; it is
+`nice_nano@2.0.0/nrf52840/zmk`. A plain "Invalid BOARD" error is usually this,
+not a missing module.
+
+## Local build prerequisites on this branch
+
+ZMK Studio is enabled for `crosses_v2_right`, and its nanopb codegen needs the
+`protobuf` and `grpcio-tools` Python packages in the repo venv. Without them the
+build dies with `ModuleNotFoundError: No module named 'google'` partway through —
+a toolchain gap, not a config error.
+
+```bash
+python3 -m venv .venv
+./.venv/bin/pip install 'cmake>=3.20,<4' protobuf grpcio-tools
+```
+
+Note the venv must be created in the worktree, not copied into it: a copied venv
+still points at the path it was created under, so `pip install` silently lands in
+the original.
 
 ## Critical constraints
 

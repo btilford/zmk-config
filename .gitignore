@@ -485,3 +485,12 @@ zmk-rgbled-widget/
 modules/
 zephyr/
 .west/
+
+# West modules imported by crosses-v2-zmk-firmware's manifest. Its projects
+# declare no `path`, so west clones them at the workspace root next to config/.
+/zmk-driver-paw3222/
+/zmk-behavior-paw32xx-res-cycle/
+/zmk-input-processor-pipeline-switch/
+/zmk-input-processor-report-rate-limit/
+/zmk-input-processor-xyz/
+/zmk-trackball-config/

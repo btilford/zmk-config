@@ -7,32 +7,17 @@
 # board: [ "nice_nano_v2" ]
 # shield: [ "corne_left", "corne_right" ]
 # include:
-#   - board: bdn9_rev2
-#   - board: nice_nano_v2
-#     shield: reviung41
-#
----
-include:
-  - board: nice_nano
-    shield: corne_left nice_view_adapter nice_view
-    artifact-name: corne_42_left
-  - board: nice_nano
-    shield: corne_right nice_view_adapter nice_view
-    artifact-name: corne_42_right
-  #- board: nice_nano
-  #  shield: typeractive-corne_left nice_view_adapter nice_view
-  #- board: nice_nano
-  #  shield: typeractive-corne_right nice_view_adapter nice_view
-  - board: nice_nano_v2
-    shield: crosses_left
-    artifact-name: crosses_42_left
+  # Crosses v2 (gggw). Built-in nRF52840, so these are boards, not a controller
+  # board plus shield. The right half is the split central and carries the
+  # config-app USB serial; see crosses-v2-zmk-firmware docs/adr/0001 for why the
+  # studio-rpc-usb-uart snippet is deliberately absent.
+  - board: crosses_v2_left
+    artifact-name: crosses_v2_42_left
 
-  - board: nice_nano_v2
-    shield: crosses_right
-    artifact-name: crosses_42_right
+  - board: crosses_v2_right
+    artifact-name: crosses_v2_42_right
+    cmake-args: -DCONFIG_ZMK_STUDIO=y -DDTS_EXTRA_CPPFLAGS="-DZMK_BEHAVIORS_KEEP_ALL"
 
-  - board: corne_min_left
-    artifact-name: corne_min_left
-  - board: corne_min_right
-    artifact-name: corne_min_right
-
+  - board: crosses_v2_right
+    shield: settings_reset
+    artifact-name: crosses_v2_settings_reset
