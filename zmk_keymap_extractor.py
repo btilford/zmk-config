@@ -57,14 +57,13 @@ def extract_layers_from_base(base_file, defines):
     processed_lines = []
     skipping = False
     for line in lines:
-        if line.startswith("#ifdef REAL_POINTING_DEVICE"):
-            skipping = "REAL_POINTING_DEVICE" not in defined_names
+        ifdef_match = re.match(r"#ifdef\s+(\w+)", line)
+        ifndef_match = re.match(r"#ifndef\s+(\w+)", line)
+        if ifdef_match:
+            skipping = ifdef_match.group(1) not in defined_names
             continue
-        elif line.startswith("#ifdef CONFIG_WIRELESS"):
-            skipping = "CONFIG_WIRELESS" not in defined_names
-            continue
-        elif line.startswith("#ifdef CONFIG_POINTING"):
-            skipping = "CONFIG_POINTING" not in defined_names
+        elif ifndef_match:
+            skipping = ifndef_match.group(1) in defined_names
             continue
         elif line.startswith("#else"):
             skipping = not skipping  # Flip the skipping state
