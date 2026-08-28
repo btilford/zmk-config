@@ -159,6 +159,13 @@ def parse_complex_macro(zmk_code: str) -> str:
     return clean[:6]  # Max 6 chars for unknown keys
 
 
+# The half-splitting marker inside a `bindings = < ... >` array must be a C
+# comment: devicetree has no notion of ║ and dtc rejects it with
+# "parse error: expected number or parenthesized expression". Only the `//`
+# layout diagrams above each layer may use the box-drawing character.
+CODE_SEPARATOR = "/*|*/"
+
+
 class DynamicKeyboardFormatter:
     """Dynamic formatter that calculates spacing based on content"""
 
@@ -368,7 +375,7 @@ class DynamicKeyboardFormatter:
         return column_maxes
 
     def _calculate_separator_position(self, column_widths: List[int]) -> int:
-        """Calculate ║ position based on left column widths"""
+        """Calculate separator position based on left column widths"""
         left_width = sum(column_widths[:6])  # First 6 columns
         return 4 + left_width + 1  # "    " + left content + " "
 
@@ -399,7 +406,7 @@ class DynamicKeyboardFormatter:
 
         for line in lines:
             line = re.sub(r"/\*\|?\*/", "", line)
-            line = re.sub(r",\s*║\s*", ",", line)
+            line = re.sub(r",\s*(?:║|/\*\|?\*/)\s*", ",", line)
 
             # Each comma-separated half (left/right) is a whitespace-separated
             # run of bindings, where a binding is one "&behavior" token plus any
@@ -617,7 +624,7 @@ class DynamicKeyboardFormatter:
         separator_pos: int,
         is_last_row: bool,
     ) -> str:
-        """Format finger row with dynamic spacing, ║ pinned to separator_pos"""
+        """Format finger row with dynamic spacing, separator pinned to separator_pos"""
         # Ensure 12 keys
         full_keys = (keys + [""] * 12)[:12]
 
@@ -635,7 +642,7 @@ class DynamicKeyboardFormatter:
         right_side = "".join(formatted_parts[6:]).rstrip()
         trailing_comma = "" if is_last_row else ","
 
-        return f"{left_side}║ {right_side}{trailing_comma}"
+        return f"{left_side}{CODE_SEPARATOR} {right_side}{trailing_comma}"
 
     def _format_thumb_row_dynamic(
         self,
@@ -645,7 +652,7 @@ class DynamicKeyboardFormatter:
         separator_pos: int,
         is_last_row: bool,
     ) -> str:
-        """Format thumb row with dynamic indentation, ║ pinned to separator_pos"""
+        """Format thumb row with dynamic indentation, separator pinned to separator_pos"""
         # Ensure 6 thumb keys
         full_keys = (keys + [""] * 6)[:6]
 
@@ -664,7 +671,7 @@ class DynamicKeyboardFormatter:
         right_thumbs = "".join(formatted_thumbs[3:]).rstrip()
         trailing_comma = "" if is_last_row else ","
 
-        return f"{left_thumbs}║ {right_thumbs}{trailing_comma}"
+        return f"{left_thumbs}{CODE_SEPARATOR} {right_thumbs}{trailing_comma}"
 
 
 def main():
