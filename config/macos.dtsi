@@ -1,0 +1,75 @@
+/* macOS leader sequences.
+ *
+ * Reached through the existing leader key (&ldr, on either thumb) rather than a
+ * layer, so nothing fires unless a sequence is completed. The leader swallows
+ * the sequence keys, so only the final chord ever reaches the OS.
+ *
+ * Mnemonics mirror the Hyprland submaps: w = window, f = focus, d = desktop,
+ * s = system.
+ *
+ * MODIFIER DIRECTION
+ * ------------------
+ * macOS is configured with Option->Command and Command->Option. So the HID
+ * modifier ZMK sends is NOT the one macOS acts on:
+ *
+ *     ZMK sends LALT  ->  macOS sees Command
+ *     ZMK sends LGUI  ->  macOS sees Option
+ *
+ * (Confirmed the hard way: holding GUI on the home row leaves a stuck *Alt* on
+ * macOS, i.e. LGUI arrived as Option.)
+ *
+ * If a test shows this backwards, swap these two lines and nothing else.
+ */
+#define MAC_CMD(k) LA(k)
+#define MAC_OPT(k) LG(k)
+
+/* ── focus (Hyprland SUPER+f) ──────────────────────────────────────────────
+ * Sends the Space number rather than typing into Spotlight, so it is
+ * deterministic. Only reaches Spaces on the *focused* display; `f l` is the
+ * one that crosses displays, because app switching follows the app.
+ *
+ * Space order is fixed and must stay that way — "Automatically rearrange
+ * Spaces based on most recent use" has to remain OFF.
+ *   1 Browser | 2 Terminal | 3 IDE | 4 Notion | 5 Obsidian
+ */
+ZMK_LEADER_SEQUENCE(mac_focus_browser,  &kp LC(N1),          F B)
+ZMK_LEADER_SEQUENCE(mac_focus_term,     &kp LC(N2),          F T)
+ZMK_LEADER_SEQUENCE(mac_focus_ide,      &kp LC(N3),          F I)
+ZMK_LEADER_SEQUENCE(mac_focus_notion,   &kp LC(N4),          F N)
+ZMK_LEADER_SEQUENCE(mac_focus_obsidian, &kp LC(N5),          F O)
+ZMK_LEADER_SEQUENCE(mac_focus_last,     &kp MAC_CMD(TAB),    F L)
+
+/* ── desktop / Spaces (Hyprland SUPER+d) ───────────────────────────────────
+ * Positional aliases for the same five, plus paging. One-shot: the leader
+ * completes on each invocation, so you cannot hold to page through Spaces.
+ */
+ZMK_LEADER_SEQUENCE(mac_ws_1,      &kp LC(N1),   D N1)
+ZMK_LEADER_SEQUENCE(mac_ws_2,      &kp LC(N2),   D N2)
+ZMK_LEADER_SEQUENCE(mac_ws_3,      &kp LC(N3),   D N3)
+ZMK_LEADER_SEQUENCE(mac_ws_4,      &kp LC(N4),   D N4)
+ZMK_LEADER_SEQUENCE(mac_ws_5,      &kp LC(N5),   D N5)
+ZMK_LEADER_SEQUENCE(mac_ws_next,   &kp LC(RIGHT), D N)
+ZMK_LEADER_SEQUENCE(mac_ws_prev,   &kp LC(LEFT),  D P)
+// App Expose: every window of the current app. Kept only if that shortcut is
+// still enabled on the Mac; Mission Control (LC(UP)) is deliberately absent.
+ZMK_LEADER_SEQUENCE(mac_ws_expose, &kp LC(DOWN),  D E)
+
+/* ── window (Hyprland SUPER+w) ─────────────────────────────────────────────
+ * Stock macOS has no move/resize/center/float/layout bindings, so those are
+ * not bound rather than approximated. macOS 15 tiling lives on Fn/Globe, an
+ * Apple vendor HID usage ZMK cannot reliably synthesise.
+ *
+ * On Linux these emit Super+W / Super+M, which open Hyprland submaps. Wrong
+ * but harmless — Esc backs out.
+ */
+ZMK_LEADER_SEQUENCE(mac_win_close, &kp MAC_CMD(W),        W Q)
+ZMK_LEADER_SEQUENCE(mac_win_full,  &kp LC(MAC_CMD(F)),    W F)
+ZMK_LEADER_SEQUENCE(mac_win_min,   &kp MAC_CMD(M),        W M)
+ZMK_LEADER_SEQUENCE(mac_win_next,  &kp MAC_CMD(GRAVE),    W N)
+
+/* ── system (Hyprland SUPER+s) ─────────────────────────────────────────────
+ * Sleep/power are not bound: macOS handles the power key below normal HID, so
+ * a generic consumer C_POWER often does nothing and occasionally shuts down
+ * without confirmation.
+ */
+ZMK_LEADER_SEQUENCE(mac_sys_lock,  &kp LC(MAC_CMD(Q)),    S L)

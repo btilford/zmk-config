@@ -72,6 +72,18 @@ parse_config:
   preprocess: true
   skip_binding_parsing: false
   raw_binding_map:
+    "&kp LSHFT":
+      tap: $$mdi:apple-keyboard-shift$$
+      hold: Shift
+    "&mo NUMPD":
+      tap: $$mdi:numeric$$
+      hold: Num
+    "&leader":
+      tap: $$mdi:keyboard-outline$$
+      hold: Leader
+    "&swapper":
+      tap: $$mdi:tab$$
+      hold: Alt-Tab
     "&none":
       tap: $$mdi:minus-circle-outline$$
       type: none
@@ -117,7 +129,6 @@ parse_config:
     "Motion": Motion
     "Text": Text
     "Media": Media
-    "Desktop": Desktop Management
     "Function": Function Keys
     "Mouse": Mouse
     "MouseSnipe": Mouse Snipe
