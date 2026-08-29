@@ -27,75 +27,12 @@ jobs:
           echo "name=zmk-firmware-$(printf '%s' "$REF" | tr '/' '-')" >> "$GITHUB_OUTPUT"
 
   build:
-    # Must match the zmk revision in config/west.yml. Building against main
-    # while the manifest pins v0.3.0 fails on the Zephyr hardware-model-v2
-    # board rename (nice_nano_v2 -> nice_nano@2.0.0/nrf52840/zmk).
+    # This branch pins zmk main in config/west.yml -- the crosses_v2 boards and
+    # the PAW3222 stack only exist there -- so CI has to match.
     needs: archive-name
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3.0
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     with:
       archive_name: ${{ needs.archive-name.outputs.name }}
-
-  keymap-diagrams:
-    runs-on: ubuntu-latest
-    needs: build
-    # Skip on PRs (no write token from forks) and on tags (nothing to commit to).
-    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          # keymap-drawer 0.23 requires 3.12. On 3.11 pip silently resolved back
-          # to 0.21, which calls the `Language.query` method tree-sitter dropped
-          # in 0.24 -- so the job died on `'tree_sitter.Language' object has no
-          # attribute 'query'` with nothing in this repo having changed.
-          python-version: '3.12'
-      - name: Install dependencies
-        # Pinned: the failure above was a resolver outcome, not a code change,
-        # and an unpinned install will drift into it again.
-        run: pip install 'keymap-drawer==0.23.0' pyelftools
-
-      - name: Generate full keymaps
-        run: |
-          mkdir -p build/keymaps build/temp
-          python zmk_keymap_extractor.py config/corne.keymap config/corne.conf \
-            build/keymaps/corne-42-full.keymap -o build/keymaps
-          python zmk_keymap_extractor.py config/crosses_shared.dtsi config/crosses.conf \
-            build/keymaps/crosses-42-full.keymap -o build/keymaps
-
-      - name: Generate diagrams
-        run: |
-          keymap -c keymap-drawer/corne-42.yaml parse -z build/keymaps/corne-42-full.keymap \
-            > build/temp/corne-full.yaml
-          sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
-          keymap -c keymap-drawer/corne-42.yaml draw build/temp/corne-full.yaml \
-            > keymap-drawer/corne-42-full.svg
-
-          keymap -c keymap-drawer/crosses-42.yaml parse -z build/keymaps/crosses-42-full.keymap \
-            > build/temp/crosses-full.yaml
-          sed -i 's/zmk_keyboard: crosses-42-full/zmk_keyboard: gggw_crosses_42_layout/' \
-            build/temp/crosses-full.yaml
-          keymap -c keymap-drawer/crosses-42.yaml draw \
-            -j config/crosses-info.json -l gggw_crosses_42_layout \
-            build/temp/crosses-full.yaml > keymap-drawer/crosses-42-full.svg
-          cp keymap-drawer/crosses-42-full.svg keymap-drawer/crosses-42.svg
-
-      - name: Commit diagrams
-        run: |
-          # Write into keymap-drawer/, not build/ -- build/ is gitignored, so the
-          # previous `git add build/diagrams/*.svg` could never stage anything and
-          # this step reported "No changes to commit" on every run.
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add keymap-drawer/*.svg
-          git diff --cached --quiet && echo "diagrams unchanged" && exit 0
-          # No `[skip ci]` marker: a push made with GITHUB_TOKEN does not trigger
-          # workflow runs, so there is no loop to guard against -- and the marker
-          # suppressed the *tag* event too, so tagging a diagram commit produced
-          # no run at all and the release job could never fire.
-          git commit -m "Update keymap diagrams"
-          git push
 
   release:
     # Archive a known-good build: `git tag v2026.08.28 && git push --tags`.
