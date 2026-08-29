@@ -24,7 +24,14 @@ ZMK_LEADER_SEQUENCE(reset,      &sys_reset,     R E S E T)
 ZMK_LEADER_SEQUENCE(boot,       &bootloader,    B O O T)
 
 ZMK_LEADER_SEQUENCE(returnToBaseLayer,  &to BASE,   L B B)
+// F1-F12 now live on the SYM top row (hold RH1). This stays as a same-half
+// fallback: the leader is on a thumb and F1-F6 are on the left half, so it
+// works if the split link is down. See base.keymap's Function layer.
 ZMK_LEADER_SEQUENCE(toFnLayer,          &sl FKEYS,  L F)
 ZMK_LEADER_SEQUENCE(toBluetooth,        &tog BTOOTH, L B T)
 ZMK_LEADER_SEQUENCE(toMouseLayer,      &smart_mouse,  L M S)
+
+// macOS chords. First keys are F/D/W/S; no collision with the U/B/R/L
+// sequences above, and no sequence is a prefix of another.
+#include "macos.dtsi"
 

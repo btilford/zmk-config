@@ -101,35 +101,65 @@ def extract_layers_from_base(base_file, defines):
         bindings = re.sub(r"/\*.*?\*/", "", bindings)
         bindings = re.sub(r"\s+", " ", bindings).strip()
 
+        # Drop the ZMK_BASE_LAYER argument separators. They are macro syntax,
+        # not part of any binding, but they stick to the last binding of each
+        # group ("&swapper,") and then keymap-drawer's raw_binding_map — which
+        # matches on exact binding text — silently fails to label that key.
+        # Row layout comes from the physical layout, so the commas carry no
+        # information the drawer needs.
+        bindings = bindings.replace(",", " ")
+        bindings = re.sub(r"\s+", " ", bindings).strip()
+
         # Replace unknown behaviors with &trans for Base layer to ensure parsing
         if layer_name == "Base":
             bindings = re.sub(r"&gresc", "&trans", bindings)
-            bindings = re.sub(r"MAGIC_SHIFT", "&trans", bindings)
-            bindings = re.sub(r"SMART_NUM", "&trans", bindings)
-            bindings = re.sub(r"&ldr", "&trans", bindings)
+            # Substitute the macros for real bindings rather than blanking
+            # them: keymap-drawer cannot parse the macro names, but rendering
+            # them as &trans left the two thumb Shifts, SMART_NUM and both
+            # leader keys as empty keys in the diagram. raw_binding_map in
+            # keymap-drawer/*.yaml labels each of these.
+            bindings = re.sub(r"MAGIC_SHIFT", "&kp LSHFT", bindings)
+            bindings = re.sub(r"SMART_NUM", "&mo NUMPD", bindings)
+            bindings = re.sub(r"&ldr", "&leader", bindings)
 
         layers[layer_name] = bindings
 
     return layers
 
 
-def generate_dts_structure(layers):
+def read_layer_defines(base_file):
+    """Read the layer `#define`s straight out of base.keymap.
+
+    These used to be hardcoded here, which silently drifted: deleting a layer
+    renumbered the real keymap but not this list, so the generated DTS
+    referenced a layer index that no longer existed and keymap-drawer failed
+    with "list index out of range". Read them instead so it cannot drift again.
+    """
+    defines = []
+    in_block = False
+    with open(base_file, "r") as f:
+        for line in f:
+            stripped = line.strip()
+            if stripped.startswith("// Layers"):
+                in_block = True
+                continue
+            if not in_block:
+                continue
+            m = re.match(r"#define\s+([A-Z][A-Z0-9_]*)\s+(\d+)\s*$", stripped)
+            if m:
+                defines.append(f"#define {m.group(1)} {m.group(2)}")
+            elif defines and not stripped.startswith(("//", "#define")) and stripped:
+                break  # past the layer block
+    if not defines:
+        raise SystemExit(f"No layer defines found under '// Layers' in {base_file}")
+    return defines
+
+
+def generate_dts_structure(layers, base_file="config/base.keymap"):
     """Generate keymap-drawer compatible DTS structure"""
     dts_lines = [
         "// Layer defines",
-        "#define BASE 0",
-        "#define SYM 1",
-        "#define NUMPD 2",
-        "#define MOTION 3",
-        "#define TEXT 4",
-        "#define MEDIA 5",
-        "#define DM 6",
-        "#define FKEYS 7",
-        "#define MOUSE 8",
-        "#define MOUSE_SNIPE 9",
-        "#define MOUSE_HYPR 10",
-        "#define BTOOTH 11",
-        "#define SYS 12",
+        *read_layer_defines(base_file),
         "",
         "/ {",
         "    keymap: keymap {",
@@ -145,7 +175,6 @@ def generate_dts_structure(layers):
         "Motion",
         "Text",
         "Media",
-        "Desktop",
         "Function",
         "Mouse",
         "MouseSnipe",
@@ -212,7 +241,7 @@ def main():
     print(f"Layers extracted: {list(layers.keys())}")
 
     # Generate DTS
-    dts_output = generate_dts_structure(layers)
+    dts_output = generate_dts_structure(layers, "config/base.keymap")
 
     # Write output
     with open(output_file, "w") as f:
