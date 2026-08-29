@@ -64,7 +64,10 @@ ZMK_LEADER_SEQUENCE(mac_ws_expose, &kp LC(DOWN),  D E)
  */
 ZMK_LEADER_SEQUENCE(mac_win_close, &kp MAC_CMD(W),        W Q)
 ZMK_LEADER_SEQUENCE(mac_win_full,  &kp LC(MAC_CMD(F)),    W F)
-ZMK_LEADER_SEQUENCE(mac_win_min,   &kp MAC_CMD(M),        W M)
+// "i" for iconify, not "m": the QMK twin has three-key W M H/J/K/L window
+// moves that a two-key W M would shadow. Kept identical on both for muscle
+// memory, even though ZMK has no such collision.
+ZMK_LEADER_SEQUENCE(mac_win_min,   &kp MAC_CMD(M),        W I)
 ZMK_LEADER_SEQUENCE(mac_win_next,  &kp MAC_CMD(GRAVE),    W N)
 
 /* ── system (Hyprland SUPER+s) ─────────────────────────────────────────────
