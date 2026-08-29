@@ -1,45 +1,114 @@
 name: Build ZMK firmware artifacts
-on: [push, pull_request, workflow_dispatch]
+
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    # Must match the zmk revision in config/west.yml. Building against main
+    # while the manifest pins v0.3.0 fails on the Zephyr hardware-model-v2
+    # board rename (nice_nano_v2 -> nice_nano@2.0.0/nrf52840/zmk).
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3.0
     with:
       archive_name: zmk-firmware-${{ github.ref_name }}
 
   keymap-diagrams:
     runs-on: ubuntu-latest
     needs: build
+    # Skip on PRs (no write token from forks) and on tags (nothing to commit to).
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          submodules: recursive
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+          python-version: '3.11'
       - name: Install dependencies
-        run: |
-          pip install keymap-drawer pyelftools
+        run: pip install keymap-drawer pyelftools
+
       - name: Generate full keymaps
         run: |
-          mkdir -p build/keymaps build/diagrams build/temp
+          mkdir -p build/keymaps build/temp
+          python zmk_keymap_extractor.py config/corne.keymap config/corne.conf \
+            build/keymaps/corne-42-full.keymap -o build/keymaps
+          python zmk_keymap_extractor.py config/crosses_shared.dtsi config/crosses.conf \
+            build/keymaps/crosses-42-full.keymap -o build/keymaps
 
-          python zmk_keymap_extractor.py config/corne.keymap config/corne-42.conf build/keymaps/corne-42-full.keymap -o build/keymaps
-          python zmk_keymap_extractor.py config/crosses_shared.dtsi config/crosses-42.conf build/keymaps/crosses-42-full.keymap -o build/keymaps
       - name: Generate diagrams
         run: |
-          keymap -c keymap-drawer/corne-42.yaml parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
+          keymap -c keymap-drawer/corne-42.yaml parse -z build/keymaps/corne-42-full.keymap \
+            > build/temp/corne-full.yaml
           sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
-          keymap -c keymap-drawer/corne-42.yaml draw build/temp/corne-full.yaml > build/diagrams/corne-42-full.svg
+          keymap -c keymap-drawer/corne-42.yaml draw build/temp/corne-full.yaml \
+            > keymap-drawer/corne-42-full.svg
 
-          keymap -c keymap-drawer/crosses-42.yaml parse -z build/keymaps/crosses-42-full.keymap > build/temp/crosses-full.yaml
-          sed -i 's/zmk_keyboard: crosses-42-full/zmk_keyboard: corne/' build/temp/crosses-full.yaml
-          keymap -c keymap-drawer/crosses-42.yaml draw build/temp/crosses-full.yaml > build/diagrams/crosses-42-full.svg
+          keymap -c keymap-drawer/crosses-42.yaml parse -z build/keymaps/crosses-42-full.keymap \
+            > build/temp/crosses-full.yaml
+          sed -i 's/zmk_keyboard: crosses-42-full/zmk_keyboard: gggw_crosses_42_layout/' \
+            build/temp/crosses-full.yaml
+          keymap -c keymap-drawer/crosses-42.yaml draw \
+            -j config/crosses-info.json -l gggw_crosses_42_layout \
+            build/temp/crosses-full.yaml > keymap-drawer/crosses-42-full.svg
+          cp keymap-drawer/crosses-42-full.svg keymap-drawer/crosses-42.svg
+
       - name: Commit diagrams
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add build/diagrams/*.svg
-          git commit -m "Update keyboard diagrams" || echo "No changes to commit"
+          # Write into keymap-drawer/, not build/ -- build/ is gitignored, so the
+          # previous `git add build/diagrams/*.svg` could never stage anything and
+          # this step reported "No changes to commit" on every run.
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add keymap-drawer/*.svg
+          git diff --cached --quiet && echo "diagrams unchanged" && exit 0
+          git commit -m "Update keymap diagrams [skip ci]"
+          git push
+
+  release:
+    # Archive a known-good build: `git tag v2026.08.28 && git push --tags`.
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: zmk-firmware-${{ github.ref_name }}
+          path: firmware
+
+      - name: Normalise filenames and checksum
+        run: |
+          cd firmware
+          ls -la
+          # The upstream workflow names images after the whole shield string,
+          # spaces included, which is awkward to pick off a release page.
+          for f in *.uf2; do
+            clean=$(printf '%s' "$f" | tr ' ' '_')
+            [ "$f" = "$clean" ] || mv -- "$f" "$clean"
+          done
+          sha256sum *.uf2 > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Publish release
+        env:
+          # Passed through the environment rather than interpolated into the
+          # script, so the ref name is never treated as shell syntax.
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          cat > notes.md <<'NOTES'
+          Firmware built from this tag. Flash by double-tapping reset on a half
+          and copying the matching `.uf2` onto the USB drive that appears.
+
+          `SHA256SUMS` is included so an archived copy can be checked against
+          what this tag actually produced.
+          NOTES
+          gh release create "$TAG" --title "$TAG" --notes-file notes.md \
+            firmware/*.uf2 firmware/SHA256SUMS
