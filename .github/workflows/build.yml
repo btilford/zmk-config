@@ -46,9 +46,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          # keymap-drawer 0.23 requires 3.12. On 3.11 pip silently resolved back
+          # to 0.21, which calls the `Language.query` method tree-sitter dropped
+          # in 0.24 -- so the job died on `'tree_sitter.Language' object has no
+          # attribute 'query'` with nothing in this repo having changed.
+          python-version: '3.12'
       - name: Install dependencies
-        run: pip install keymap-drawer pyelftools
+        # Pinned: the failure above was a resolver outcome, not a code change,
+        # and an unpinned install will drift into it again.
+        run: pip install 'keymap-drawer==0.23.0' pyelftools
 
       - name: Generate full keymaps
         run: |
