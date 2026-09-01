@@ -134,8 +134,8 @@ draw-toucan2:
 	mkdir -p build/keymaps build/diagrams build/temp
 	python zmk_keymap_extractor.py "{{ config }}/toucan.keymap" "{{ config }}/toucan.conf" build/keymaps/toucan2-full.keymap -o build/keymaps
 	keymap -c "{{ draw }}/toucan2.yaml" parse -z build/keymaps/toucan2-full.keymap > build/temp/toucan2-full.yaml
-	sed -i 's/zmk_keyboard: toucan2-full/zmk_keyboard: corne/' build/temp/toucan2-full.yaml
-	keymap -c "{{ draw }}/toucan2.yaml" draw build/temp/toucan2-full.yaml > build/diagrams/toucan2-full.svg
+	sed -i 's/zmk_keyboard: toucan2-full/zmk_keyboard: toucan_42_layout/' build/temp/toucan2-full.yaml
+	keymap -c "{{ draw }}/toucan2.yaml" draw -j "{{ config }}/toucan-info.json" -l toucan_42_layout build/temp/toucan2-full.yaml > build/diagrams/toucan2-full.svg
 	cp build/diagrams/toucan2-full.svg "{{ draw }}/toucan2-full.svg"
 	echo "\u2713 Updated keymap-drawer/toucan2-full.svg"
 
