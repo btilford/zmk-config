@@ -41,11 +41,18 @@ manifest:
       remote: Good-Great-Grand-Wonderful
       revision: zephyr-4.1
       path: modules/gggw-zmk-keebs
-      import: config/west.yml
-    - name: zmk-pmw3610-driver
-      remote: efogdev
-      revision: zephyr-4.1
-      path: modules/zmk/zmk-pmw3610-driver
+      # gggw's manifest carries two pmw3610 copies under names west cannot
+      # dedupe against ours: zmk-pmw3610-driver-efog is the same repo and
+      # revision as the efogdev driver, and -badjeff is a separate fork. All
+      # three compiled at once, and their event listeners collided at link:
+      #   multiple definition of `zmk_listener_zmk_pmw3610_idle_sleeper'
+      # The crosses shield overlays instantiate "pixart,pmw3610-alt", which is
+      # badjeff's binding, so badjeff is the copy that must survive. Both
+      # efogdev copies are dropped -- gggw's here, ours below.
+      import:
+        file: config/west.yml
+        name-blocklist:
+          - zmk-pmw3610-driver-efog
     - name: zmk-report-rate-limit
       remote: efogdev
       revision: main
