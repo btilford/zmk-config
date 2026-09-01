@@ -61,3 +61,31 @@ include:
   - board: seeeduino_xiao_ble
     shield: settings_reset
     artifact-name: toucan2_settings_reset
+
+  # settings_reset images for the rest of the fleet.
+  #
+  # These wipe the settings partition (BLE bonds, ext-power state, the stored
+  # split peripheral address). A UF2 write does not touch that partition, so
+  # reflashing firmware cannot clear a bad bond -- you need one of these, and
+  # then the real firmware again afterwards.
+  #
+  # Worth having prebuilt: on 2026-08-31 a Crosses re-bond needed these
+  # repeatedly, and hand-building one per half mid-debug is slow and easy to
+  # get wrong. Note both halves of a split must be reset together, or the two
+  # keep mismatched views of each other.
+  #
+  # One image serves both the Corne 42 and the Crosses -- settings_reset does
+  # not depend on the shield, only the board, and both are nice_nano_v2.
+  - board: nice_nano_v2
+    shield: settings_reset
+    artifact-name: nice_nano_v2_settings_reset
+
+  # Corne Min has no controller shield -- each half is its own board, so it
+  # needs a reset image per side.
+  - board: corne_min_left
+    shield: settings_reset
+    artifact-name: corne_min_left_settings_reset
+
+  - board: corne_min_right
+    shield: settings_reset
+    artifact-name: corne_min_right_settings_reset
