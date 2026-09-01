@@ -23,14 +23,21 @@ include:
   #  shield: typeractive-corne_left nice_view_adapter nice_view
   #- board: nice_nano
   #  shield: typeractive-corne_right nice_view_adapter nice_view
-  # Both halves are nice!nano v1 -- their bootloaders report
-  # Board-ID: nRF52840-nicenano (no -v2 suffix), serials C202D13AA14FC065
-  # (right/central) and 4C1739D148EC0A98 (left), verified 2026-08-31.
-  - board: nice_nano
+  # nice!nano v2, despite the bootloader. Both halves ship an old UF2
+  # bootloader (0.6.0, Jun 19 2021) that reports Board-ID nRF52840-nicenano
+  # with no -v2 suffix -- serials C202D13AA14FC065 (right/central) and
+  # 4C1739D148EC0A98 (left). That ID is wrong, and building nice_nano for it
+  # inverts control-gpios on the P0.13 ext-power LDO, cutting power to
+  # everything on the switched rail. Proven on hardware 2026-08-31: the v1
+  # build gave `spi_nrfx_spim: Timeout` + `PMW3610 initialization failed in
+  # step 0` and `i2c_nrfx_twi: Error on I2C line`, killing the trackball and
+  # the OLED together; the v2 build ran PMW3610 init steps 0-3 clean with no
+  # I2C error. Trust the peripherals, not the Board-ID.
+  - board: nice_nano_v2
     shield: crosses_left
     artifact-name: crosses_42_left
 
-  - board: nice_nano
+  - board: nice_nano_v2
     shield: crosses_right
     artifact-name: crosses_42_right
 
