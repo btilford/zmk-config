@@ -63,6 +63,10 @@ jobs:
             build/keymaps/corne-42-full.keymap -o build/keymaps
           python zmk_keymap_extractor.py config/crosses_shared.dtsi config/crosses.conf \
             build/keymaps/crosses-42-full.keymap -o build/keymaps
+          python zmk_keymap_extractor.py config/corne_min.keymap config/corne_min.conf \
+            build/keymaps/corne-min-full.keymap -o build/keymaps
+          python zmk_keymap_extractor.py config/toucan.keymap config/toucan.conf \
+            build/keymaps/toucan2-full.keymap -o build/keymaps
 
       - name: Generate diagrams
         run: |
@@ -80,6 +84,20 @@ jobs:
             -j config/crosses-info.json -l gggw_crosses_42_layout \
             build/temp/crosses-full.yaml > keymap-drawer/crosses-42-full.svg
           cp keymap-drawer/crosses-42-full.svg keymap-drawer/crosses-42.svg
+
+          # Corne Min and Toucan2 both share base.keymap and the 42-key foostan
+          # layout, so they reuse the stock `corne` physical layout.
+          keymap -c keymap-drawer/corne-min.yaml parse -z build/keymaps/corne-min-full.keymap \
+            > build/temp/corne-min-full.yaml
+          sed -i 's/zmk_keyboard: corne-min-full/zmk_keyboard: corne/' build/temp/corne-min-full.yaml
+          keymap -c keymap-drawer/corne-min.yaml draw build/temp/corne-min-full.yaml \
+            > keymap-drawer/corne-min-full.svg
+
+          keymap -c keymap-drawer/toucan2.yaml parse -z build/keymaps/toucan2-full.keymap \
+            > build/temp/toucan2-full.yaml
+          sed -i 's/zmk_keyboard: toucan2-full/zmk_keyboard: corne/' build/temp/toucan2-full.yaml
+          keymap -c keymap-drawer/toucan2.yaml draw build/temp/toucan2-full.yaml \
+            > keymap-drawer/toucan2-full.svg
 
       - name: Commit diagrams
         run: |
