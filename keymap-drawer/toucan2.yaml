@@ -1,3 +1,4 @@
+# Toucan2 (beekeeb) -- 42 keys, shared base.keymap. The trackpad lives in the module and is not part of the key matrix, so it does not appear here.
 draw_config:
   # Dark mode follows the viewer's prefers-color-scheme. keymap-drawer emits both
   # palettes and a media query, so one SVG works on a light README and a dark one.
@@ -22,7 +23,7 @@ draw_config:
       font-size: 10px;
       font-weight: bold;
     }
-
+ 
     text.label {
       stroke: #dfdfde;
       stroke-width: 12;
@@ -68,7 +69,7 @@ draw_config:
       translate: 8px 13px;
       font-size: 8px;
       opacity: 1.0;
-    }
+    } 
 
     .combo.text_with_symbol.tap {
       translate: -1px 1px;
@@ -90,7 +91,7 @@ draw_config:
     }
     text.label { stroke: #22272e; }
     rect.held, rect.combo.held { fill: #5a3f3f; }
-  glyph_tap_size: 22
+  glyph_tap_size: 22 
   glyph_hold_size: 16
   glyph_shifted_size: 16
   glyphs: {}
@@ -148,7 +149,17 @@ parse_config:
   trans_legend:
     tap: $$mdi:transfer$$
     type: trans
-  layer_legend_map: {}
+  layer_legend_map:
+    "Base": Base
+    "Symbol": Symbol
+    "Numpad": Numpad
+    "Motion": Motion
+    "Text": Text
+    "Media": Media
+    "Function": Function Keys
+    "Mouse": Mouse
+    "MouseSnipe": Mouse Snipe
+    "System": System
   mark_alternate_layer_activators: true
   modifier_fn_map:
     left_ctrl: Ctl
@@ -253,4 +264,4 @@ parse_config:
     BT_SEL: $$mdi:bluetooth-connect$$
   zmk_combos: {}
   zmk_preamble: '#define KEYMAP_DRAWER'
-  zmk_additional_includes: []
+  zmk_additional_includes: ["zmk-helpers/include"]

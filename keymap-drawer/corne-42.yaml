@@ -1,8 +1,22 @@
 draw_config:
+  # Dark mode follows the viewer's prefers-color-scheme. keymap-drawer emits both
+  # palettes and a media query, so one SVG works on a light README and a dark one.
+  dark_mode: auto
+
   append_colon_to_layer_header: false
   draw_key_sides: true
 
   svg_extra_style: |
+
+    /* Backgrounds. Gradients rather than raster images so the SVG stays
+       self-contained -- an external <image href> breaks offline and is stripped
+       by GitHub's sanitizer. */
+    svg.keymap {
+      background: linear-gradient(160deg, #f7f8fa 0%, #eceff3 55%, #e4e9ef 100%);
+    }
+    rect.layer, rect.keymap {
+      fill: none;
+    }
     svg.keymap {
       font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
       font-size: 10px;
@@ -64,6 +78,18 @@ draw_config:
       font-size: 8px;
       opacity: 1.0;
     }
+  svg_style_dark: |
+    svg.keymap {
+      fill: #d1d6db;
+      background: linear-gradient(160deg, #1b1f24 0%, #22272e 55%, #1a1e23 100%);
+    }
+    rect.key { fill: #3f4750; }
+    rect.combo, rect.combo-separate {
+      fill: #2d4a52;
+      stroke: #5b6a74;
+    }
+    text.label { stroke: #22272e; }
+    rect.held, rect.combo.held { fill: #5a3f3f; }
   glyph_tap_size: 22 
   glyph_hold_size: 16
   glyph_shifted_size: 16

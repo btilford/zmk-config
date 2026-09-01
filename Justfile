@@ -111,6 +111,34 @@ draw-crosses:
 	echo "✓ Updated keymap-drawer/crosses-42-full.svg"
 	echo "✓ Updated keymap-drawer/crosses-42.svg"
 
+# generate corne min keymap diagram
+draw-corne-min:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	echo "Generating corne min keymap diagram..."
+	mkdir -p build/keymaps build/diagrams build/temp
+	python zmk_keymap_extractor.py "{{ config }}/corne_min.keymap" "{{ config }}/corne_min.conf" build/keymaps/corne-min-full.keymap -o build/keymaps
+	keymap -c "{{ draw }}/corne-min.yaml" parse -z build/keymaps/corne-min-full.keymap > build/temp/corne-min-full.yaml
+	sed -i 's/zmk_keyboard: corne-min-full/zmk_keyboard: corne/' build/temp/corne-min-full.yaml
+	keymap -c "{{ draw }}/corne-min.yaml" draw build/temp/corne-min-full.yaml > build/diagrams/corne-min-full.svg
+	cp build/diagrams/corne-min-full.svg "{{ draw }}/corne-min-full.svg"
+	echo "\u2713 Updated keymap-drawer/corne-min-full.svg"
+
+# generate toucan2 keymap diagram
+draw-toucan2:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	echo "Generating toucan2 keymap diagram..."
+	mkdir -p build/keymaps build/diagrams build/temp
+	python zmk_keymap_extractor.py "{{ config }}/toucan.keymap" "{{ config }}/toucan.conf" build/keymaps/toucan2-full.keymap -o build/keymaps
+	keymap -c "{{ draw }}/toucan2.yaml" parse -z build/keymaps/toucan2-full.keymap > build/temp/toucan2-full.yaml
+	sed -i 's/zmk_keyboard: toucan2-full/zmk_keyboard: corne/' build/temp/toucan2-full.yaml
+	keymap -c "{{ draw }}/toucan2.yaml" draw build/temp/toucan2-full.yaml > build/diagrams/toucan2-full.svg
+	cp build/diagrams/toucan2-full.svg "{{ draw }}/toucan2-full.svg"
+	echo "\u2713 Updated keymap-drawer/toucan2-full.svg"
+
 # clean generated files
 clean-generated:
     rm -rf build/
@@ -132,6 +160,18 @@ draw: test-layouts
         echo "✓ Crosses diagram generated successfully"
     else
         echo "⚠ Crosses diagram failed, continuing..."
+    fi
+
+    if just draw-corne-min; then
+        echo "✓ Corne Min diagram generated successfully"
+    else
+        echo "⚠ Corne Min diagram failed, continuing..."
+    fi
+
+    if just draw-toucan2; then
+        echo "✓ Toucan2 diagram generated successfully"
+    else
+        echo "⚠ Toucan2 diagram failed, continuing..."
     fi
 
     echo "Keymap generation complete. Check for any warnings above."
