@@ -9,8 +9,11 @@ draw_config:
   svg_extra_style: |
 
     /* Backgrounds. Gradients rather than raster images so the SVG stays
-       self-contained -- an external <image href> breaks offline and is stripped
-       by GitHub's sanitizer. */
+       self-contained -- an external image href breaks offline and is stripped
+       by GitHub's sanitizer. Keep angle brackets out of this block entirely:
+       keymap-drawer writes it verbatim into a style element with no CDATA wrapper, so
+       a bare left-angle-bracket, even inside a CSS comment, breaks XML
+       well-formedness. Verify with: python -c "import xml.etree.ElementTree as E; E.parse('f.svg')" */
     svg.keymap {
       background: linear-gradient(160deg, #f7f8fa 0%, #eceff3 55%, #e4e9ef 100%);
     }

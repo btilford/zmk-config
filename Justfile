@@ -90,6 +90,7 @@ draw-corne:
 	keymap -c "{{ draw }}/corne-42.yaml" parse -z build/keymaps/corne-42-full.keymap > build/temp/corne-full.yaml
 	sed -i 's/zmk_keyboard: corne-42-full/zmk_keyboard: corne/' build/temp/corne-full.yaml
 	keymap -c "{{ draw }}/corne-42.yaml" draw build/temp/corne-full.yaml > build/diagrams/corne-42-full.svg
+	python tools/svg-postprocess.py build/diagrams/corne-42-full.svg
 	cp build/diagrams/corne-42-full.svg "{{ draw }}/corne-42-full.svg"
 	echo "✓ Generated build/diagrams/corne-42-full.svg"
 	echo "✓ Updated keymap-drawer/corne-42-full.svg"
@@ -105,6 +106,7 @@ draw-crosses:
 	keymap -c "{{ draw }}/crosses-42.yaml" parse -z build/keymaps/crosses-42-full.keymap > build/temp/crosses-full.yaml
 	sed -i 's/zmk_keyboard: crosses-42-full/zmk_keyboard: gggw_crosses_42_layout/' build/temp/crosses-full.yaml
 	keymap -c "{{ draw }}/crosses-42.yaml" draw -j "{{ config }}/crosses-info.json" -l gggw_crosses_42_layout build/temp/crosses-full.yaml > build/diagrams/crosses-42-full.svg
+	python tools/svg-postprocess.py build/diagrams/crosses-42-full.svg
 	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42-full.svg"
 	cp build/diagrams/crosses-42-full.svg "{{ draw }}/crosses-42.svg"
 	echo "✓ Generated build/diagrams/crosses-42-full.svg"
@@ -122,6 +124,7 @@ draw-corne-min:
 	keymap -c "{{ draw }}/corne-min.yaml" parse -z build/keymaps/corne-min-full.keymap > build/temp/corne-min-full.yaml
 	sed -i 's/zmk_keyboard: corne-min-full/zmk_keyboard: corne/' build/temp/corne-min-full.yaml
 	keymap -c "{{ draw }}/corne-min.yaml" draw build/temp/corne-min-full.yaml > build/diagrams/corne-min-full.svg
+	python tools/svg-postprocess.py build/diagrams/corne-min-full.svg
 	cp build/diagrams/corne-min-full.svg "{{ draw }}/corne-min-full.svg"
 	echo "\u2713 Updated keymap-drawer/corne-min-full.svg"
 
@@ -136,6 +139,7 @@ draw-toucan2:
 	keymap -c "{{ draw }}/toucan2.yaml" parse -z build/keymaps/toucan2-full.keymap > build/temp/toucan2-full.yaml
 	sed -i 's/zmk_keyboard: toucan2-full/zmk_keyboard: toucan_42_layout/' build/temp/toucan2-full.yaml
 	keymap -c "{{ draw }}/toucan2.yaml" draw -j "{{ config }}/toucan-info.json" -l toucan_42_layout build/temp/toucan2-full.yaml > build/diagrams/toucan2-full.svg
+	python tools/svg-postprocess.py build/diagrams/toucan2-full.svg
 	cp build/diagrams/toucan2-full.svg "{{ draw }}/toucan2-full.svg"
 	echo "\u2713 Updated keymap-drawer/toucan2-full.svg"
 
