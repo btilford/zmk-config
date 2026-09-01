@@ -37,22 +37,24 @@ manifest:
       path: modules/zmk/zmk-tri-state
     - name: zmk-unicode
       path: modules/zmk/unicode
+    # main, not zephyr-4.1. The zephyr-4.1 branch ships only a
+    # boards/nice_nano.overlay for the crosses shield, and Zephyr applies a
+    # shield's board overlay on an exact board-name match -- so a nice_nano_v2
+    # build silently got no overlay, leaving i2c0 on the P0.17/P0.20 defaults.
+    # Those are SPI SCK and the trackball's irq-gpios, so the OLED had no bus
+    # and the trackball reported no motion. main carries
+    # boards/nice_nano_v2.overlay with the P1.4/P1.6 I2C remap.
+    #
+    # main also declares a single pmw3610 driver rather than zephyr-4.1's two
+    # extra copies, so the three-way link collision goes away without a
+    # name-blocklist, and it uses compatible "pixart,pmw3610-efogtech" with the
+    # newer trackball tuning -- which is what config/crosses_{left,right}.conf
+    # were already written against.
     - name: gggw-zmk-keebs
       remote: Good-Great-Grand-Wonderful
-      revision: zephyr-4.1
+      revision: main
       path: modules/gggw-zmk-keebs
-      # gggw's manifest carries two pmw3610 copies under names west cannot
-      # dedupe against ours: zmk-pmw3610-driver-efog is the same repo and
-      # revision as the efogdev driver, and -badjeff is a separate fork. All
-      # three compiled at once, and their event listeners collided at link:
-      #   multiple definition of `zmk_listener_zmk_pmw3610_idle_sleeper'
-      # The crosses shield overlays instantiate "pixart,pmw3610-alt", which is
-      # badjeff's binding, so badjeff is the copy that must survive. Both
-      # efogdev copies are dropped -- gggw's here, ours below.
-      import:
-        file: config/west.yml
-        name-blocklist:
-          - zmk-pmw3610-driver-efog
+      import: config/west.yml
     - name: zmk-report-rate-limit
       remote: efogdev
       revision: main
