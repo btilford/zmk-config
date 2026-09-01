@@ -101,6 +101,14 @@ jobs:
             -j config/toucan-info.json -l toucan_42_layout \
             build/temp/toucan2-full.yaml > keymap-drawer/toucan2-full.svg
 
+      - name: Post-process and validate SVGs
+        # keymap-drawer reports success on both defects this guards against:
+        # colon glyph refs that librsvg cannot resolve (blank glyphs everywhere
+        # outside a browser), and a bare '<' in svg_extra_style breaking XML
+        # well-formedness. A malformed SVG now fails the build instead of being
+        # committed.
+        run: python tools/svg-postprocess.py keymap-drawer/*.svg
+
       - name: Commit diagrams
         run: |
           # Write into keymap-drawer/, not build/ -- build/ is gitignored, so the
