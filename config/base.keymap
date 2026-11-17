@@ -399,12 +399,12 @@ ZMK_BASE_LAYER(MouseHypr,
 // -----------------------------------------------------------------------------------------
 // | BOOT   | DSC0    | BT BTD  | BT BTD  | BT BTD  | BT BTD  | ║ |        | USB    |        | TOG     | BT BTP | BOOT   |
 // | CLR    | BT0     | BT BTS  | BT BTS  | BT BTS  | BT BTS  | ║ |        |        |        |         |        |        |
-// | RST    | BT BTD  |         | BT BTC  |         | BLE     | ║ | BT BTN |        |        |         |        | RST    |
+// | RST    |         | BT BTC  |         |         | BLE     | ║ | BT BTN |        |        |         |        | RST    |
 //                     |        |        |        |         |        |        |
 // -----------------------------------------------------------------------------------------
 ZMK_BASE_LAYER(System,
     &bootloader    &bt BT_DISC 0 &bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4, /*|*/ &trans     &out OUT_USB &trans &out OUT_TOG &bt BT_PRV &bootloader,
     &bt BT_CLR_ALL &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4,  /*|*/ &trans     &trans       &trans &trans       &trans     &trans,
-    &sys_reset     &bt BT_DISC   &trans        &bt BT_CLR    &trans        &out OUT_BLE,  /*|*/ &bt BT_NXT &trans       &trans &trans       &trans     &sys_reset,
+    &sys_reset     &trans        &bt BT_CLR    &trans        &trans        &out OUT_BLE,  /*|*/ &bt BT_NXT &trans       &trans &trans       &trans     &sys_reset,
                                                &trans         &trans        &trans,       /*|*/ &trans        &trans        &trans
 )
